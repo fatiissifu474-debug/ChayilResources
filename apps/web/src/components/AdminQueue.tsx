@@ -10,6 +10,7 @@ export interface QueueItem {
   level: string;
   className: string | null;
   subjectName: string | null;
+  submittedBy: string | null;
   reviewStatus: string;
   createdAt: string;
 }
@@ -48,6 +49,7 @@ export function AdminQueue({ initialPending }: { initialPending: QueueItem[] }) 
             {[r.className, r.subjectName, r.level, r.type.replace(/_/g, " "), r.reviewStatus]
               .filter(Boolean)
               .join(" · ")}
+            {r.submittedBy && <> · Submitted by {r.submittedBy}</>}
           </p>
           <div className="mt-3 flex gap-2">
             <button

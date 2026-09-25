@@ -24,6 +24,15 @@ export async function SiteHeader() {
           <Link href="/search" className="text-zinc-700 hover:underline">
             Search
           </Link>
+          <Link href="/packs" className="text-zinc-700 hover:underline">
+            Packs
+          </Link>
+          <Link href="/assessments" className="text-zinc-700 hover:underline">
+            Assessments
+          </Link>
+          <Link href="/strategies" className="text-zinc-700 hover:underline">
+            Strategies
+          </Link>
           {session?.user ? (
             <>
               <Link href="/dashboard" className="text-zinc-700 hover:underline">
@@ -34,6 +43,9 @@ export async function SiteHeader() {
               </Link>
               <Link href="/notifications" className="text-zinc-700 hover:underline">
                 Notifications
+              </Link>
+              <Link href="/contribute" className="text-zinc-700 hover:underline">
+                Contribute
               </Link>
               {staff && (
                 <Link href="/admin" className="text-zinc-700 hover:underline">

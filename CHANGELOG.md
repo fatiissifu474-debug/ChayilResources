@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-09-25
+
+### Added
+- Hardening: staff file upload (25 MB allowlist, replace supported) on the resource page
+- Password reset via BetterAuth (`/reset-password`, dev links to server console)
+- Teacher contributions: multipart submit with optional file, review with CONTRIBUTOR badge, My contributions
+- Assessment Resource Centre (`/assessments`), teaching strategies shelf (`/strategies`)
+- Lesson preparation packs: auto-assembly from approved resources, Learn/Plan/Practice/Check detail, one-click save-all
+- Resource-type filters on browse/search; contributor/pack/strategy navigation
+- Runbook: reset flow, contributions, packs, curl-based API testing notes
+
 ## [0.2.0] - 2026-09-25
 
 ### Added

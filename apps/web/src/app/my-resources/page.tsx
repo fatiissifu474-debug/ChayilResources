@@ -10,7 +10,7 @@ export default async function MyResourcesPage() {
   const viewer = await getViewer();
   if (!viewer) redirect("/login");
 
-  const [saved, collections, downloads, views] = await Promise.all([
+  const [saved, collections, downloads, submissions, views] = await Promise.all([
     db.savedResource.findMany({
       where: { userId: viewer.id },
       orderBy: { createdAt: "desc" },
@@ -31,6 +31,11 @@ export default async function MyResourcesPage() {
       orderBy: { createdAt: "desc" },
       take: 10,
       include: { resource: { include: { subject: true, classLevel: true } } },
+    }),
+    db.resource.findMany({
+      where: { submittedById: viewer.id },
+      orderBy: { createdAt: "desc" },
+      include: { subject: true, classLevel: true },
     }),
     db.viewLog.findMany({
       where: { userId: viewer.id },
@@ -62,6 +67,29 @@ export default async function MyResourcesPage() {
           <div className="mt-2">
             <CollectionManager initial={managerData} />
           </div>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">My contributions ({submissions.length})</h2>
+          {submissions.length === 0 ? (
+            <p className="mt-2 text-sm text-zinc-500">
+              Nothing submitted yet.{" "}
+              <Link href="/contribute" className="font-medium text-emerald-700 underline">
+                Contribute a resource
+              </Link>
+            </p>
+          ) : (
+            <ul className="mt-2 flex flex-col gap-1.5">
+              {submissions.map((s) => (
+                <li key={s.id} className="text-sm">
+                  <Link href={`/resources/${s.id}`} className="text-emerald-900 hover:underline">
+                    {s.title}
+                  </Link>{" "}
+                  <span className="text-zinc-500">— {s.reviewStatus.replace(/_/g, " ")}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
 
         <section className="mt-8">

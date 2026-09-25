@@ -66,6 +66,11 @@ export default function LoginPage() {
         >
           {pending ? "Logging in…" : "Log in"}
         </button>
+        <p className="text-sm text-zinc-600">
+          <Link href="/reset-password" className="font-medium text-emerald-700 underline">
+            Forgot your password?
+          </Link>
+        </p>
       </form>
     </main>
   );

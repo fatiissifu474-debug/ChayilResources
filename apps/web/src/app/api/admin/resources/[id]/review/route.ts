@@ -27,7 +27,14 @@ export async function POST(req: Request, { params }: Params) {
       body.decision === "approve"
         ? {
             reviewStatus: "APPROVED",
-            badges: Array.from(new Set([...resource.badges, "REVIEWED"])),
+            badges: Array.from(
+              new Set([
+                ...resource.badges,
+                "REVIEWED",
+                // Teacher/partner submissions earn the contributor badge (PRD §14).
+                ...(resource.submittedById ? ["CONTRIBUTOR"] : []),
+              ]),
+            ),
           }
         : { reviewStatus: "REJECTED" },
     select: { id: true, reviewStatus: true, badges: true },

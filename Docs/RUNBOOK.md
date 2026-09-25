@@ -77,10 +77,17 @@ Restore: `psql -U chayil -h localhost -d chayil_resources -f backup.sql`
 
 ## 5. Test accounts & flows
 
-- Sign up at `/signup` → `/onboarding` (level/class/subject) → `/dashboard`.
-- Promote to reviewer for `/admin` (review queue: create draft → approve/reject).
-- Teacher loop: browse/search → resource page → save, add to collection, feedback, download.
-- `/my-resources`: collections, saved, downloads, recently viewed. `/notifications`: new in your subjects.
+- Sign up at `/signup` → `/onboarding` (level/class/subjects) → `/dashboard`.
+- Promote to reviewer for `/admin` (review queue: create draft → approve/reject; attach files on the resource page).
+- Teacher loop: browse/search (+ type filters) → resource page → save, add to collection, feedback, download.
+- `/my-resources`: collections, saved, downloads, recently viewed, my contributions. `/notifications`: new in your subjects.
+- Contributions: `/contribute` (multipart submit → DRAFT → review → CONTRIBUTOR badge).
+- Packs: `/admin` create pack (auto-assembles approved class/subject resources) → approve → `/packs`.
+- Discovery shelves: `/assessments`, `/strategies`, `/packs`.
+- Password reset: `/reset-password` — dev links print to the server console
+  (`PASSWORD_RESET_DEV_LOG=true`); wire Resend/SMTP in `src/lib/auth.ts` for pilot.
+- Live API testing without a browser: `curl.exe` with `-c/-b` cookie jars; JSON bodies
+  from files (`-d "@body.json"`) — PowerShell quoting mangles inline JSON.
 
 ## 6. Troubleshooting
 

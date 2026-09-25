@@ -92,6 +92,8 @@ model User {
   feedbacks        Feedback[]
   savedResources   SavedResource[]
   collections      Collection[]
+  submittedResources Resource[] @relation("SubmittedResources")
+  packsCreated     Pack[]       @relation("PackCreator")
   viewLogs         ViewLog[]
   downloadLogs     DownloadLog[]
   searchLogs       SearchLog[]
@@ -155,6 +157,7 @@ model ClassLevel {
   subjects  Subject[]
   topics    Topic[]
   resources Resource[]
+  packs     Pack[]
 
   @@unique([level, name])
   @@map("class_level")
@@ -169,6 +172,7 @@ model Subject {
   strands    Strand[]
   topics     Topic[]
   resources  Resource[]
+  packs      Pack[]
 
   @@unique([level, name])
   @@map("subject")
@@ -239,8 +243,11 @@ model Resource {
   feedbacks        Feedback[]
   savedBy          SavedResource[]
   collectionItems  CollectionItem[]
+  packItems        PackItem[]
   viewLogs         ViewLog[]
   downloadLogs     DownloadLog[]
+  submittedById    String?       // teacher/contributor who submitted (null = staff-created)
+  submittedBy      User?         @relation("SubmittedResources", fields: [submittedById], references: [id], onDelete: SetNull)
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
@@ -257,6 +264,46 @@ model ResourceTopic {
 
   @@id([resourceId, topicId])
   @@map("resource_topic")
+}
+
+// ---------- Lesson preparation packs (Phase 2, PRD §20) ----------
+// A pack groups resources for one class/subject into a preparation flow.
+// Items are auto-assembled from approved resources; the detail page slots
+// them into Learn → Plan → Practice → Check sections by resource type.
+
+model Pack {
+  id           String        @id @default(cuid())
+  title        String
+  description  String
+  objectives   String?
+  level        EducationLevel
+  classLevelId String?
+  classLevel   ClassLevel?   @relation(fields: [classLevelId], references: [id], onDelete: SetNull)
+  subjectId    String?
+  subject      Subject?      @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  reviewStatus ReviewStatus  @default(DRAFT)
+  createdById  String
+  createdBy    User          @relation("PackCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  items        PackItem[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([level, classLevelId, subjectId])
+  @@index([reviewStatus])
+  @@map("pack")
+}
+
+model PackItem {
+  id         String   @id @default(cuid())
+  packId     String
+  pack       Pack     @relation(fields: [packId], references: [id], onDelete: Cascade)
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  position   Int
+
+  @@unique([packId, resourceId])
+  @@index([packId, position])
+  @@map("pack_item")
 }
 
 // ---------- Teacher engagement ----------

@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { ResourceCard } from "@/components/ResourceCard";
 import { SaveButton } from "@/components/SaveButton";
 import { CollectionAdder } from "@/components/CollectionAdder";
+import { AdminFileUpload } from "@/components/AdminFileUpload";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
 
 const BADGE_STYLES: Record<string, string> = {
@@ -125,6 +126,12 @@ export default async function ResourcePage({
         <div className="mt-4">
           <CollectionAdder resourceId={id} authed={!!viewer} />
         </div>
+
+        {staff && (
+          <div className="mt-4">
+            <AdminFileUpload resourceId={id} hasFile={!!resource.fileKey} />
+          </div>
+        )}
 
         <section className="mt-8 border-t border-zinc-200 pt-6">
           <h2 className="font-semibold text-zinc-900">Teacher feedback</h2>

@@ -5,6 +5,7 @@ import { getViewer, isStaff } from "@/lib/require-user";
 import { SiteHeader } from "@/components/SiteHeader";
 import { AdminQueue, type QueueItem } from "@/components/AdminQueue";
 import { AdminCreateForm } from "@/components/AdminCreateForm";
+import { AdminPackForm, AdminPackQueue } from "@/components/AdminPackForm";
 
 function toQueueItem(r: {
   id: string;
@@ -15,6 +16,7 @@ function toQueueItem(r: {
   createdAt: Date;
   subject: { name: string } | null;
   classLevel: { name: string } | null;
+  submittedBy: { name: string } | null;
 }): QueueItem {
   return {
     id: r.id,
@@ -23,6 +25,7 @@ function toQueueItem(r: {
     level: r.level,
     className: r.classLevel?.name ?? null,
     subjectName: r.subject?.name ?? null,
+    submittedBy: r.submittedBy?.name ?? null,
     reviewStatus: r.reviewStatus,
     createdAt: r.createdAt.toISOString(),
   };
@@ -49,17 +52,22 @@ export default async function AdminPage() {
     );
   }
 
-  const [pending, decided] = await Promise.all([
+  const [pending, decided, draftPacks] = await Promise.all([
     db.resource.findMany({
       where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
       orderBy: { createdAt: "desc" },
-      include: { subject: true, classLevel: true },
+      include: { subject: true, classLevel: true, submittedBy: { select: { name: true } } },
     }),
     db.resource.findMany({
       where: { reviewStatus: { in: ["APPROVED", "REJECTED"] } },
       orderBy: { updatedAt: "desc" },
       take: 10,
-      include: { subject: true, classLevel: true },
+      include: { subject: true, classLevel: true, submittedBy: { select: { name: true } } },
+    }),
+    db.pack.findMany({
+      where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
+      orderBy: { createdAt: "desc" },
+      include: { _count: { select: { items: true } } },
     }),
   ]);
 
@@ -79,6 +87,15 @@ export default async function AdminPage() {
             Review queue ({pending.length})
           </h2>
           <AdminQueue initialPending={pending.map(toQueueItem)} />
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Lesson packs (create + review)</h2>
+          <AdminPackForm />
+          <h3 className="mt-4 text-sm font-semibold text-zinc-900">Draft packs ({draftPacks.length})</h3>
+          <AdminPackQueue
+            packs={draftPacks.map((p) => ({ id: p.id, title: p.title, itemCount: p._count.items }))}
+          />
         </section>
 
         <section className="mt-8">
