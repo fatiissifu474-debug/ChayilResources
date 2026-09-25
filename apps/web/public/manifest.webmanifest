@@ -1,0 +1,10 @@
+{
+  "name": "ChayilResources",
+  "short_name": "ChayilResources",
+  "description": "Curriculum-aligned teaching resources: find the right resource for the right class, subject and topic.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d5c46",
+  "icons": []
+}

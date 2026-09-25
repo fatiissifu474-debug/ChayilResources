@@ -1,0 +1,348 @@
+// ChayilResources — Prisma schema
+// Auth tables follow the better-auth Prisma adapter conventions.
+// Curriculum taxonomy: Level -> ClassLevel -> Subject -> Strand -> SubStrand -> Topic -> Resource
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- Enums ----------
+
+enum Role {
+  TEACHER
+  REVIEWER
+  ADMIN
+  PUBLISHER
+  INSTITUTION_ADMIN
+}
+
+enum EducationLevel {
+  PRIMARY
+  JHS
+  SHS
+  TVET
+}
+
+enum ResourceType {
+  TEXTBOOK
+  TEACHER_GUIDE
+  LESSON_PLAN
+  SCHEME_OF_LEARNING
+  WORKSHEET
+  ASSESSMENT
+  QUIZ
+  EXAM_PREP
+  CLASSROOM_ACTIVITY
+  TEACHING_STRATEGY
+  REVISION_MATERIAL
+  STUDENT_MATERIAL
+  VIDEO
+  DIAGRAM
+  POSTER
+  PRESENTATION
+  READING_MATERIAL
+  PRACTICAL_ACTIVITY
+  PROJECT_IDEA
+  REMEDIAL
+  ENRICHMENT
+  OTHER
+}
+
+enum ReviewStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
+enum FeedbackKind {
+  USEFUL
+  NOT_USEFUL
+  APPROPRIATE
+  NEEDS_IMPROVEMENT
+  INCORRECT
+  OUTDATED
+  INAPPROPRIATE
+}
+
+// ---------- BetterAuth ----------
+
+model User {
+  id              String    @id
+  name            String
+  email           String
+  emailVerified   Boolean
+  image           String?
+  createdAt       DateTime
+  updatedAt       DateTime
+  sessions        Session[]
+  accounts        Account[]
+
+  // ChayilResources profile fields
+  role             Role     @default(TEACHER)
+  profileCompleted Boolean  @default(false)
+  teachingLevels   String[] @default([])
+  subjects         String[] @default([])
+  school           String?
+  feedbacks        Feedback[]
+  savedResources   SavedResource[]
+  collections      Collection[]
+  viewLogs         ViewLog[]
+  downloadLogs     DownloadLog[]
+  searchLogs       SearchLog[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+// ---------- Curriculum taxonomy ----------
+
+model ClassLevel {
+  id        String          @id @default(cuid())
+  level     EducationLevel
+  name      String          // e.g. "Primary 5", "JHS 2", "SHS 1", "TVET Year 1"
+  position  Int             // ordering within level
+  subjects  Subject[]
+  topics    Topic[]
+  resources Resource[]
+
+  @@unique([level, name])
+  @@map("class_level")
+}
+
+model Subject {
+  id         String          @id @default(cuid())
+  name       String          // e.g. "English Language"
+  code       String?
+  level      EducationLevel
+  classLevels ClassLevel[]
+  strands    Strand[]
+  topics     Topic[]
+  resources  Resource[]
+
+  @@unique([level, name])
+  @@map("subject")
+}
+
+model Strand {
+  id        String      @id @default(cuid())
+  name      String
+  subjectId String
+  subject   Subject     @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subStrands SubStrand[]
+
+  @@unique([subjectId, name])
+  @@map("strand")
+}
+
+model SubStrand {
+  id       String  @id @default(cuid())
+  name     String
+  strandId String
+  strand   Strand  @relation(fields: [strandId], references: [id], onDelete: Cascade)
+  topics   Topic[]
+
+  @@unique([strandId, name])
+  @@map("sub_strand")
+}
+
+model Topic {
+  id           String      @id @default(cuid())
+  name         String
+  objectives   String?
+  subjectId    String
+  subject      Subject     @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subStrandId  String?
+  subStrand    SubStrand?  @relation(fields: [subStrandId], references: [id], onDelete: SetNull)
+  classLevelId String?
+  classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id], onDelete: SetNull)
+  resources    ResourceTopic[]
+
+  @@index([subjectId])
+  @@map("topic")
+}
+
+// ---------- Resources ----------
+
+model Resource {
+  id               String        @id @default(cuid())
+  title            String
+  description      String
+  type             ResourceType
+  fileKey          String?       // storage key (null = metadata-only / link pending)
+  fileSize         Int?
+  mimeType         String?
+  pages            Int?
+  author           String?
+  publisher        String?
+  edition          String?
+  copyrightHolder  String        // required: copyright governance (PRD §28)
+  permittedUse     String        // required: e.g. "Classroom use, no redistribution"
+  reviewStatus     ReviewStatus  @default(DRAFT)
+  badges           String[]      @default([]) // REVIEWED, CURRICULUM_ALIGNED, CONTRIBUTOR, RECOMMENDED
+  level            EducationLevel
+  classLevelId     String?
+  classLevel       ClassLevel?   @relation(fields: [classLevelId], references: [id], onDelete: SetNull)
+  subjectId        String?
+  subject          Subject?      @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  topics           ResourceTopic[]
+  feedbacks        Feedback[]
+  savedBy          SavedResource[]
+  collectionItems  CollectionItem[]
+  viewLogs         ViewLog[]
+  downloadLogs     DownloadLog[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([level, classLevelId, subjectId, type])
+  @@index([reviewStatus])
+  @@map("resource")
+}
+
+model ResourceTopic {
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  topicId    String
+  topic      Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([resourceId, topicId])
+  @@map("resource_topic")
+}
+
+// ---------- Teacher engagement ----------
+
+model Feedback {
+  id         String       @id @default(cuid())
+  resourceId String
+  resource   Resource     @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind       FeedbackKind
+  comment    String?
+  createdAt  DateTime     @default(now())
+
+  @@unique([resourceId, userId, kind])
+  @@map("feedback")
+}
+
+model SavedResource {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resourceId String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([userId, resourceId])
+  @@map("saved_resource")
+}
+
+model Collection {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  items     CollectionItem[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@map("collection")
+}
+
+model CollectionItem {
+  id           String     @id @default(cuid())
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  resourceId   String
+  resource     Resource   @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@unique([collectionId, resourceId])
+  @@map("collection_item")
+}
+
+// ---------- Usage metrics (PRD §33) ----------
+
+model ViewLog {
+  id         String    @id @default(cuid())
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  resourceId String
+  resource   Resource  @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+
+  @@index([resourceId])
+  @@map("view_log")
+}
+
+model DownloadLog {
+  id         String    @id @default(cuid())
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  resourceId String
+  resource   Resource  @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+
+  @@index([resourceId])
+  @@map("download_log")
+}
+
+model SearchLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  query     String
+  createdAt DateTime @default(now())
+
+  @@index([query])
+  @@map("search_log")
+}
