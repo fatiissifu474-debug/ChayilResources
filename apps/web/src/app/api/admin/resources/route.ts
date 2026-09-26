@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer, isStaff } from "@/lib/require-user";
-import { EducationLevel, ResourceType } from "@prisma/client";
+import { EducationLevel, ResourceType, AccessLevel } from "@prisma/client";
 
 /** POST /api/admin/resources — create a draft resource (staff only). */
 export async function POST(req: Request) {
@@ -26,6 +26,10 @@ export async function POST(req: Request) {
   if (!(Object.values(EducationLevel) as string[]).includes(level)) {
     return NextResponse.json({ error: "Invalid education level" }, { status: 400 });
   }
+  const access =
+    typeof body.access === "string" && (Object.values(AccessLevel) as string[]).includes(body.access)
+      ? (body.access as AccessLevel)
+      : AccessLevel.FREE;
 
   const classLevelId = typeof body.classLevelId === "string" && body.classLevelId ? body.classLevelId : null;
   const subjectId = typeof body.subjectId === "string" && body.subjectId ? body.subjectId : null;
@@ -51,6 +55,7 @@ export async function POST(req: Request) {
       publisher: typeof body.publisher === "string" ? body.publisher.trim().slice(0, 200) || null : null,
       copyrightHolder: copyrightHolder.slice(0, 200),
       permittedUse: permittedUse.slice(0, 500),
+      access,
       reviewStatus: "DRAFT",
       topics: topicIds.length > 0 ? { create: topicIds.map((topicId) => ({ topicId })) } : undefined,
     },

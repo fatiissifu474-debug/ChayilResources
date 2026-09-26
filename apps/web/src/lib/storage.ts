@@ -6,6 +6,7 @@ import {
   GetObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 /**
  * Storage abstraction.
@@ -98,10 +99,11 @@ class R2StorageDriver implements StorageDriver {
   }
 
   async getUrl(key: string): Promise<string> {
+    // Public bucket: direct URL. Private bucket: time-limited presigned URL
+    // (works with Cloudflare R2; credentials already validated in constructor).
     if (this.publicUrl) return `${this.publicUrl}/${key}`;
-    // Private bucket: files are served through the authenticated download route,
-    // which reads via GetObjectCommand (see read() below).
-    return `/api/resources/by-key/${encodeURIComponent(key)}/download`;
+    const command = new GetObjectCommand({ Bucket: this.bucket, Key: key });
+    return getSignedUrl(this.client, command, { expiresIn: 3600 });
   }
 
   async delete(key: string): Promise<void> {

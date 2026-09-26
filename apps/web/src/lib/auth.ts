@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "@better-auth/prisma-adapter";
 import { db } from "./db";
+import { sendEmail } from "./email";
 
 export const auth = betterAuth({
   database: prismaAdapter(db, { provider: "postgresql" }),
@@ -9,15 +10,12 @@ export const auth = betterAuth({
     autoSignIn: true,
     minPasswordLength: 8,
     sendResetPassword: async ({ user, url }) => {
-      // No SMTP on a dev laptop: log the link server-side. For pilot, plug in
-      // Resend/SMTP here (see Docs/RUNBOOK.md).
-      if (process.env.PASSWORD_RESET_DEV_LOG === "true") {
-        console.log(`[dev] password reset for ${user.email}: ${url}`);
-        return;
-      }
-      throw new Error(
-        "Password reset email is not configured. Set PASSWORD_RESET_DEV_LOG=true for local dev or wire an email provider.",
-      );
+      // Pilot/prod: set RESEND_API_KEY to email it. Local dev logs the link.
+      await sendEmail({
+        to: user.email,
+        subject: "Reset your ChayilResources password",
+        text: `You requested a password reset for your ChayilResources teacher account.\n\nReset it here (link expires in 1 hour):\n${url}\n\nIf you did not request this, ignore this message.`,
+      });
     },
   },
   session: {

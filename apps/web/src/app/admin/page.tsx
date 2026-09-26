@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { AdminQueue, type QueueItem } from "@/components/AdminQueue";
 import { AdminCreateForm } from "@/components/AdminCreateForm";
 import { AdminPackForm, AdminPackQueue } from "@/components/AdminPackForm";
+import { AdminAccessManager } from "@/components/AdminAccessManager";
 
 function toQueueItem(r: {
   id: string;
@@ -52,7 +53,7 @@ export default async function AdminPage() {
     );
   }
 
-  const [pending, decided, draftPacks] = await Promise.all([
+  const [pending, decided, draftPacks, institutions, entitlements] = await Promise.all([
     db.resource.findMany({
       where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
       orderBy: { createdAt: "desc" },
@@ -68,6 +69,17 @@ export default async function AdminPage() {
       where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
       orderBy: { createdAt: "desc" },
       include: { _count: { select: { items: true } } },
+    }),
+    db.institution.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        members: { include: { user: { select: { id: true, name: true, email: true } } } },
+      },
+    }),
+    db.entitlement.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 30,
+      include: { user: { select: { name: true, email: true } } },
     }),
   ]);
 
@@ -95,6 +107,32 @@ export default async function AdminPage() {
           <h3 className="mt-4 text-sm font-semibold text-zinc-900">Draft packs ({draftPacks.length})</h3>
           <AdminPackQueue
             packs={draftPacks.map((p) => ({ id: p.id, title: p.title, itemCount: p._count.items }))}
+          />
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Access management (premium + institutions)</h2>
+          <AdminAccessManager
+            initial={{
+              institutions: institutions.map((i) => ({
+                id: i.id,
+                name: i.name,
+                code: i.code,
+                active: i.active,
+                members: i.members.map((m) => ({
+                  userId: m.user.id,
+                  name: m.user.name,
+                  email: m.user.email,
+                })),
+              })),
+              entitlements: entitlements.map((e) => ({
+                id: e.id,
+                kind: e.kind,
+                expiresAt: e.expiresAt ? e.expiresAt.toISOString() : null,
+                email: e.user.email,
+                name: e.user.name,
+              })),
+            }}
           />
         </section>
 

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { getViewer, isStaff } from "@/lib/require-user";
+import { canDownloadResource } from "@/lib/access";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ResourceCard } from "@/components/ResourceCard";
 import { SaveButton } from "@/components/SaveButton";
@@ -40,6 +41,8 @@ export default async function ResourcePage({
   await db.viewLog
     .create({ data: { resourceId: id, userId: viewer?.id } })
     .catch(() => {});
+
+  const mayDownload = await canDownloadResource(viewer, resource.access);
 
   const [feedbackRows, savedEntry, related] = await Promise.all([
     db.feedback.groupBy({
@@ -88,6 +91,11 @@ export default async function ResourcePage({
           <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-700">
             {resource.reviewStatus.replace(/_/g, " ")}
           </span>
+          {resource.access === "PREMIUM" && (
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+              PREMIUM
+            </span>
+          )}
         </div>
 
         <h1 className="mt-2 text-2xl font-bold text-zinc-900">{resource.title}</h1>
@@ -110,12 +118,21 @@ export default async function ResourcePage({
         <div className="mt-6 flex flex-wrap gap-3">
           <SaveButton resourceId={id} initialSaved={!!savedEntry} authed={!!viewer} />
           {resource.fileKey ? (
-            <a
-              href={`/api/resources/${id}/download`}
-              className="rounded-full border border-zinc-300 px-5 py-2 text-sm font-medium text-zinc-700"
-            >
-              ⬇ Download
-            </a>
+            mayDownload ? (
+              <a
+                href={`/api/resources/${id}/download`}
+                className="rounded-full border border-zinc-300 px-5 py-2 text-sm font-medium text-zinc-700"
+              >
+                ⬇ Download
+              </a>
+            ) : (
+              <span
+                className="rounded-full border border-amber-300 bg-amber-50 px-5 py-2 text-sm text-amber-800"
+                title="Download requires Premium or institutional access"
+              >
+                🔒 Premium — preview only
+              </span>
+            )
           ) : (
             <span className="rounded-full border border-dashed border-zinc-300 px-5 py-2 text-sm text-zinc-500">
               File coming soon

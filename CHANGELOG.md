@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-09-26
+
+### Added
+- Pluggable email (`src/lib/email.ts`): Resend when configured, console fallback locally
+- R2 private-bucket support via 1-hour presigned URLs (public buckets unchanged)
+- Granular notification preferences with per-category enforcement and muted states
+- Hybrid access model: FREE/PREMIUM resources, personal entitlements (optional expiry),
+  institutions with join codes and member management, download gating with staff bypass,
+  access label on dashboard
+- Runbook: pilot notes for email, R2, access, notifications
+
 ## [0.3.0] - 2026-09-25
 
 ### Added

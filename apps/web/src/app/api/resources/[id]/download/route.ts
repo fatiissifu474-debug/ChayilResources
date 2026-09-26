@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer, isStaff } from "@/lib/require-user";
+import { canDownloadResource } from "@/lib/access";
 import { getStorageDriver } from "@/lib/storage";
 
 interface Params {
@@ -40,6 +41,13 @@ export async function GET(_req: Request, { params }: Params) {
   }
   if (!resource.fileKey) {
     return NextResponse.json({ error: "File not yet available" }, { status: 404 });
+  }
+  // Hybrid access (PRD §25): premium downloads need an entitlement; staff bypass for review.
+  if (!(await canDownloadResource(viewer, resource.access))) {
+    return NextResponse.json(
+      { error: "Premium resource. Download requires Premium or institutional access.", premium: true },
+      { status: 403 },
+    );
   }
 
   await db.downloadLog

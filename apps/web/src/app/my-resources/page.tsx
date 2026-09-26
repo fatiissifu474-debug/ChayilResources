@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { getViewer } from "@/lib/require-user";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CollectionManager, type ManagerCollection } from "@/components/CollectionManager";
+import { InstitutionJoin } from "@/components/InstitutionJoin";
 
 /** My Resources — saved, collections, downloads, recently viewed. */
 export default async function MyResourcesPage() {
@@ -61,6 +62,9 @@ export default async function MyResourcesPage() {
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-6 py-8">
         <h1 className="text-2xl font-bold text-zinc-900">My resources</h1>
+        <div className="mt-4">
+          <InstitutionJoin />
+        </div>
 
         <section className="mt-6">
           <h2 className="font-semibold text-zinc-900">Collections ({collections.length})</h2>

@@ -26,6 +26,7 @@ export function AdminCreateForm() {
   const [description, setDescription] = useState("");
   const [type, setType] = useState("WORKSHEET");
   const [level, setLevel] = useState("JHS");
+  const [access, setAccess] = useState("FREE");
   const [classLevelId, setClassLevelId] = useState("");
   const [subjectId, setSubjectId] = useState("");
   const [author, setAuthor] = useState("");
@@ -54,7 +55,7 @@ export function AdminCreateForm() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        title, description, type, level,
+        title, description, type, level, access,
         classLevelId: classLevelId || null,
         subjectId: subjectId || null,
         author: author || null,
@@ -97,6 +98,12 @@ export function AdminCreateForm() {
         <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)} className={inputCls}>
           <option value="">—</option>
           {subjects.filter((s) => s.level === level).map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+        </select>
+      </label>
+      <label className="text-sm font-medium text-zinc-700">Access
+        <select value={access} onChange={(e) => setAccess(e.target.value)} className={inputCls}>
+          <option value="FREE">Free</option>
+          <option value="PREMIUM">Premium</option>
         </select>
       </label>
       <label className="text-sm font-medium text-zinc-700">Author<input value={author} onChange={(e) => setAuthor(e.target.value)} className={inputCls} /></label>

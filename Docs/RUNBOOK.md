@@ -84,8 +84,16 @@ Restore: `psql -U chayil -h localhost -d chayil_resources -f backup.sql`
 - Contributions: `/contribute` (multipart submit → DRAFT → review → CONTRIBUTOR badge).
 - Packs: `/admin` create pack (auto-assembles approved class/subject resources) → approve → `/packs`.
 - Discovery shelves: `/assessments`, `/strategies`, `/packs`.
-- Password reset: `/reset-password` — dev links print to the server console
-  (`PASSWORD_RESET_DEV_LOG=true`); wire Resend/SMTP in `src/lib/auth.ts` for pilot.
+- Password reset: `/reset-password` — `src/lib/email.ts` sends via Resend when
+  `RESEND_API_KEY` (+ optional `EMAIL_FROM`) is set, else logs to the server console.
+  Pilot: create a free Resend account, verify a domain, set the two vars, restart.
+- Hybrid access: resources are `FREE`/`PREMIUM` (admin create form). `/admin` grants
+  premium (optional expiry), manages institutions (join codes) and members.
+  Teachers join via My Resources. Downloads gate on entitlement; previews stay open.
+- Notifications: `/notifications` + per-category checkboxes (stored in
+  `notification_preference`). Sections render "Muted" when disabled.
+- Storage: disk driver locally; `STORAGE_DRIVER=r2` uses Cloudflare R2. Public buckets
+  serve direct URLs, private buckets get 1-hour presigned URLs automatically.
 - Live API testing without a browser: `curl.exe` with `-c/-b` cookie jars; JSON bodies
   from files (`-d "@body.json"`) — PowerShell quoting mangles inline JSON.
 

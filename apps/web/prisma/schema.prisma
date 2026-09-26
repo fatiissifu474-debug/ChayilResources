@@ -94,6 +94,11 @@ model User {
   collections      Collection[]
   submittedResources Resource[] @relation("SubmittedResources")
   packsCreated     Pack[]       @relation("PackCreator")
+  notificationPreference NotificationPreference?
+  entitlements     Entitlement[]
+  grantedEntitlements Entitlement[] @relation("GrantedEntitlements")
+  institutionMemberships InstitutionMember[]
+  institutionsCreated Institution[] @relation("InstitutionCreator")
   viewLogs         ViewLog[]
   downloadLogs     DownloadLog[]
   searchLogs       SearchLog[]
@@ -234,6 +239,7 @@ model Resource {
   permittedUse     String        // required: e.g. "Classroom use, no redistribution"
   reviewStatus     ReviewStatus  @default(DRAFT)
   badges           String[]      @default([]) // REVIEWED, CURRICULUM_ALIGNED, CONTRIBUTOR, RECOMMENDED
+  access           AccessLevel   @default(FREE) // hybrid model (PRD §25): free vs premium
   level            EducationLevel
   classLevelId     String?
   classLevel       ClassLevel?   @relation(fields: [classLevelId], references: [id], onDelete: SetNull)
@@ -304,6 +310,76 @@ model PackItem {
   @@unique([packId, resourceId])
   @@index([packId, position])
   @@map("pack_item")
+}
+
+// ---------- Hybrid access (PRD §25) ----------
+// Discovery stays open; downloads of PREMIUM resources require an entitlement:
+// a personal PREMIUM grant or membership in an active INSTITUTION.
+
+enum AccessLevel {
+  FREE
+  PREMIUM
+}
+
+enum EntitlementKind {
+  PREMIUM
+  INSTITUTIONAL
+}
+
+model Entitlement {
+  id            String          @id @default(cuid())
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind          EntitlementKind
+  expiresAt     DateTime?       // null = no expiry
+  institutionId String?
+  institution   Institution?    @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  grantedById   String?
+  grantedBy     User?           @relation("GrantedEntitlements", fields: [grantedById], references: [id], onDelete: SetNull)
+  createdAt     DateTime        @default(now())
+
+  @@index([userId])
+  @@map("entitlement")
+}
+
+model Institution {
+  id          String              @id @default(cuid())
+  name        String
+  code        String              @unique // join code shared with teachers
+  active      Boolean             @default(true)
+  createdById String
+  createdBy   User                @relation("InstitutionCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  members     InstitutionMember[]
+  entitlements Entitlement[]
+  createdAt   DateTime            @default(now())
+
+  @@map("institution")
+}
+
+model InstitutionMember {
+  id            String      @id @default(cuid())
+  institutionId String
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@unique([institutionId, userId])
+  @@map("institution_member")
+}
+
+// ---------- Notification preferences (PRD §23) ----------
+
+model NotificationPreference {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  newInSubjects Boolean  @default(true)
+  savedUpdates  Boolean  @default(true)
+  announcements Boolean  @default(true)
+  updatedAt     DateTime @updatedAt
+
+  @@map("notification_preference")
 }
 
 // ---------- Teacher engagement ----------

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { describeAccess } from "@/lib/access";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ResourceCard, type CardResource } from "@/components/ResourceCard";
 import { EducationLevel } from "@prisma/client";
@@ -39,6 +40,7 @@ export default async function DashboardPage() {
 
   const levels = profile.teachingLevels as EducationLevel[];
   const levelFilter = levels.length > 0 ? { level: { in: levels } } : {};
+  const accessLabel = await describeAccess(profile.id);
 
   const [recommended, recent, saved, savedCount, continueLearning] = await Promise.all([
     db.resource.findMany({
@@ -81,7 +83,7 @@ export default async function DashboardPage() {
           <p className="mt-1 text-sm text-zinc-600">
             Levels: {levels.length > 0 ? levels.join(", ") : "—"} · Subjects:{" "}
             {profile.subjects.length > 0 ? profile.subjects.join(", ") : "—"}
-            {profile.school ? ` · ${profile.school}` : ""}
+            {profile.school ? ` · ${profile.school}` : ""} · Access: {accessLabel}
           </p>
         </section>
 
