@@ -7,6 +7,7 @@ import { AdminQueue, type QueueItem } from "@/components/AdminQueue";
 import { AdminCreateForm } from "@/components/AdminCreateForm";
 import { AdminPackForm, AdminPackQueue } from "@/components/AdminPackForm";
 import { AdminAccessManager } from "@/components/AdminAccessManager";
+import { AdminModuleForm, AdminModuleQueue } from "@/components/AdminLearning";
 
 function toQueueItem(r: {
   id: string;
@@ -17,7 +18,7 @@ function toQueueItem(r: {
   createdAt: Date;
   subject: { name: string } | null;
   classLevel: { name: string } | null;
-  submittedBy: { name: string } | null;
+  submittedBy: { name: string; organization: string | null } | null;
 }): QueueItem {
   return {
     id: r.id,
@@ -27,6 +28,7 @@ function toQueueItem(r: {
     className: r.classLevel?.name ?? null,
     subjectName: r.subject?.name ?? null,
     submittedBy: r.submittedBy?.name ?? null,
+    submittedOrg: r.submittedBy?.organization ?? null,
     reviewStatus: r.reviewStatus,
     createdAt: r.createdAt.toISOString(),
   };
@@ -53,11 +55,11 @@ export default async function AdminPage() {
     );
   }
 
-  const [pending, decided, draftPacks, institutions, entitlements] = await Promise.all([
+  const [pending, decided, draftPacks, institutions, entitlements, draftModules] = await Promise.all([
     db.resource.findMany({
       where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
       orderBy: { createdAt: "desc" },
-      include: { subject: true, classLevel: true, submittedBy: { select: { name: true } } },
+      include: { subject: true, classLevel: true, submittedBy: { select: { name: true, organization: true } } },
     }),
     db.resource.findMany({
       where: { reviewStatus: { in: ["APPROVED", "REJECTED"] } },
@@ -80,6 +82,11 @@ export default async function AdminPage() {
       orderBy: { createdAt: "desc" },
       take: 30,
       include: { user: { select: { name: true, email: true } } },
+    }),
+    db.module.findMany({
+      where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
+      orderBy: { createdAt: "desc" },
+      include: { _count: { select: { steps: true } } },
     }),
   ]);
 
@@ -133,6 +140,15 @@ export default async function AdminPage() {
                 name: e.user.name,
               })),
             }}
+          />
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Professional learning (create + review)</h2>
+          <AdminModuleForm />
+          <h3 className="mt-4 text-sm font-semibold text-zinc-900">Draft modules ({draftModules.length})</h3>
+          <AdminModuleQueue
+            modules={draftModules.map((m) => ({ id: m.id, title: m.title, stepCount: m._count.steps }))}
           />
         </section>
 

@@ -61,6 +61,11 @@ export async function POST(req: Request) {
   }
 
   const author = str("author") || null;
+  // Publisher attribution (PRD §17): submissions carry the org name.
+  const submitter = await db.user.findUnique({
+    where: { id: viewer.id },
+    select: { name: true, organization: true },
+  });
 
   const resource = await db.resource.create({
     data: {
@@ -70,7 +75,8 @@ export async function POST(req: Request) {
       level: level as EducationLevel,
       classLevelId,
       subjectId,
-      author,
+      author: author ?? submitter?.name ?? null,
+      publisher: submitter?.organization,
       copyrightHolder: copyrightHolder.slice(0, 200),
       permittedUse: permittedUse.slice(0, 500),
       reviewStatus: "DRAFT",

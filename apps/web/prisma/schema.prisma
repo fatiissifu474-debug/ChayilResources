@@ -94,6 +94,9 @@ model User {
   collections      Collection[]
   submittedResources Resource[] @relation("SubmittedResources")
   packsCreated     Pack[]       @relation("PackCreator")
+  organization     String?      // publisher / partner organization (PRD §17)
+  modulesCreated   Module[]     @relation("ModuleCreator")
+  moduleProgress   ModuleProgress[]
   notificationPreference NotificationPreference?
   entitlements     Entitlement[]
   grantedEntitlements Entitlement[] @relation("GrantedEntitlements")
@@ -380,6 +383,57 @@ model NotificationPreference {
   updatedAt     DateTime @updatedAt
 
   @@map("notification_preference")
+}
+
+// ---------- Professional learning modules (Phase 2, PRD §22) ----------
+// Short training modules: guides, tips and readings in ordered steps.
+// Teachers track step progress; completion is recorded per teacher.
+
+model Module {
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  title          String
+  description    String
+  objectives     String?
+  durationMinutes Int?
+  audience       String?
+  reviewStatus   ReviewStatus   @default(DRAFT)
+  createdById    String
+  createdBy      User           @relation("ModuleCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  steps          ModuleStep[]
+  progress       ModuleProgress[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([reviewStatus])
+  @@map("module")
+}
+
+model ModuleStep {
+  id       String @id @default(cuid())
+  moduleId String
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  position Int
+  title    String
+  body     String
+
+  @@unique([moduleId, position])
+  @@index([moduleId, position])
+  @@map("module_step")
+}
+
+model ModuleProgress {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  moduleId      String
+  module        Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  completedStep Int      @default(0) // highest completed step position (1-based); 0 = started
+  completed     Boolean  @default(false)
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, moduleId])
+  @@map("module_progress")
 }
 
 // ---------- Teacher engagement ----------

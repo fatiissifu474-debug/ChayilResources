@@ -10,6 +10,8 @@ export default function SignUpPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPublisher, setIsPublisher] = useState(false);
+  const [organization, setOrganization] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -18,11 +20,24 @@ export default function SignUpPage() {
     setError(null);
     setPending(true);
     const { error } = await authClient.signUp.email({ name, email, password });
-    setPending(false);
     if (error) {
+      setPending(false);
       setError(error.message ?? "Sign up failed. Please try again.");
       return;
     }
+    if (isPublisher) {
+      const res = await fetch("/api/profile/publisher", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ organization }),
+      });
+      if (!res.ok) {
+        setPending(false);
+        setError("Account created, but publisher registration failed. Contact support.");
+        return;
+      }
+    }
+    setPending(false);
     router.push("/onboarding");
     router.refresh();
   }
@@ -71,6 +86,26 @@ export default function SignUpPage() {
           />
         </label>
         {error && <p className="text-sm text-red-600">{error}</p>}
+        <label className="flex items-start gap-2 text-sm text-zinc-700">
+          <input
+            type="checkbox"
+            checked={isPublisher}
+            onChange={(e) => setIsPublisher(e.target.checked)}
+            className="mt-1 h-4 w-4 accent-emerald-800"
+          />
+          <span>I publish educational content (publisher account for an organization)</span>
+        </label>
+        {isPublisher && (
+          <label className="flex flex-col gap-1 text-sm font-medium text-zinc-700">
+            Organization
+            <input
+              value={organization}
+              onChange={(e) => setOrganization(e.target.value)}
+              placeholder="e.g. Sunrise Press"
+              className="rounded-md border border-zinc-300 px-3 py-2 font-normal"
+            />
+          </label>
+        )}
         <button
           type="submit"
           disabled={pending}

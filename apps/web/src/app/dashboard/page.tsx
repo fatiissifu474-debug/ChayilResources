@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { describeAccess } from "@/lib/access";
+import { getRecommendations } from "@/lib/recommendations";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ResourceCard, type CardResource } from "@/components/ResourceCard";
 import { EducationLevel } from "@prisma/client";
@@ -39,16 +41,10 @@ export default async function DashboardPage() {
   if (!profile.profileCompleted) redirect("/onboarding");
 
   const levels = profile.teachingLevels as EducationLevel[];
-  const levelFilter = levels.length > 0 ? { level: { in: levels } } : {};
   const accessLabel = await describeAccess(profile.id);
 
-  const [recommended, recent, saved, savedCount, continueLearning] = await Promise.all([
-    db.resource.findMany({
-      where: { reviewStatus: "APPROVED", ...levelFilter },
-      orderBy: { createdAt: "desc" },
-      take: 6,
-      include: { subject: true, classLevel: true },
-    }),
+  const recommended = await getRecommendations(profile.id, 6);
+  const [recent, saved, savedCount, continueLearning, myLearning] = await Promise.all([
     db.resource.findMany({
       where: { reviewStatus: "APPROVED" },
       orderBy: { createdAt: "desc" },
@@ -67,6 +63,12 @@ export default async function DashboardPage() {
       orderBy: { createdAt: "desc" },
       take: 5,
       include: { resource: { include: { subject: true, classLevel: true } } },
+    }),
+    db.moduleProgress.findMany({
+      where: { userId: profile.id },
+      orderBy: { updatedAt: "desc" },
+      take: 3,
+      include: { module: { include: { _count: { select: { steps: true } } } } },
     }),
   ]);
 
@@ -94,11 +96,54 @@ export default async function DashboardPage() {
           ) : (
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               {recommended.map((r) => (
-                <ResourceCard key={r.id} resource={toCard(r)} />
+                <div key={r.id}>
+                  <ResourceCard
+                    resource={{
+                      id: r.id,
+                      title: r.title,
+                      description: r.description,
+                      type: r.type,
+                      level: r.level,
+                      badges: r.badges,
+                      subjectName: r.subjectName,
+                      className: r.className,
+                    }}
+                  />
+                  {r.reasons.length > 0 && (
+                    <p className="mt-1 text-xs text-zinc-500">Because: {r.reasons.join(" · ")}</p>
+                  )}
+                </div>
               ))}
             </div>
           )}
         </section>
+
+        {myLearning.length > 0 && (
+          <section className="mt-8">
+            <h2 className="font-semibold text-zinc-900">My learning</h2>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              {myLearning.map((p) => {
+                const total = p.module._count.steps;
+                const pct = total > 0 ? Math.min(100, Math.round((p.completedStep / total) * 100)) : 0;
+                return (
+                  <Link
+                    key={p.module.id}
+                    href={`/learn/${p.module.slug}`}
+                    className="rounded-lg border border-zinc-200 bg-white p-4 hover:border-emerald-700"
+                  >
+                    <p className="font-medium text-emerald-900">{p.module.title}</p>
+                    <div className="mt-2 h-2 rounded-full bg-zinc-100">
+                      <div className="h-2 rounded-full bg-emerald-700" style={{ width: `${pct}%` }} />
+                    </div>
+                    <p className="mt-1 text-xs text-zinc-500">
+                      {p.completed ? "Completed ✓" : `${pct}% complete`}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <section className="mt-8">
           <h2 className="font-semibold text-zinc-900">Continue learning</h2>

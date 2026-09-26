@@ -83,7 +83,12 @@ Restore: `psql -U chayil -h localhost -d chayil_resources -f backup.sql`
 - `/my-resources`: collections, saved, downloads, recently viewed, my contributions. `/notifications`: new in your subjects.
 - Contributions: `/contribute` (multipart submit → DRAFT → review → CONTRIBUTOR badge).
 - Packs: `/admin` create pack (auto-assembles approved class/subject resources) → approve → `/packs`.
-- Discovery shelves: `/assessments`, `/strategies`, `/packs`.
+- Discovery shelves: `/assessments`, `/strategies`, `/packs`, `/learn`.
+- Publishers: sign up with the publisher checkbox (or upgrade at `/publisher`) → submit at
+  `/contribute` with org attribution → review queue shows the org → approve adds CONTRIBUTOR.
+- Professional learning: `/admin` creates modules with ordered steps → approve → `/learn`;
+  teachers mark steps done; dashboard shows My learning. Recommendations are scored
+  (subjects, saves, views, searches) with reasons shown on the dashboard.
 - Password reset: `/reset-password` — `src/lib/email.ts` sends via Resend when
   `RESEND_API_KEY` (+ optional `EMAIL_FROM`) is set, else logs to the server console.
   Pilot: create a free Resend account, verify a domain, set the two vars, restart.

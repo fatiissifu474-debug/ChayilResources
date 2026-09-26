@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-09-26
+
+### Added
+- Improved recommendations: scored engine (subjects, saves, views, searches, recency)
+  with reasons, saved items excluded, My-learning section on dashboard
+- Professional learning: modules with ordered steps, step progress + completion,
+  `/learn` shelf, admin create/review
+- Publisher flow: signup checkbox + self-upgrade, `/publisher` portal with stats,
+  org attribution on submissions and review queue
+- Runbook: publisher, learning and recommendations notes
+
 ## [0.4.0] - 2026-09-26
 
 ### Added

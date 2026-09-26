@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { EducationLevel } from "@prisma/client";
+import { EducationLevel, Role } from "@prisma/client";
 
 const profileSelect = {
   id: true,
@@ -13,6 +13,7 @@ const profileSelect = {
   teachingLevels: true,
   subjects: true,
   school: true,
+  organization: true,
 } as const;
 
 async function requireUserId(): Promise<string | null> {
@@ -39,6 +40,8 @@ export async function PATCH(req: Request) {
     teachingLevels?: unknown;
     subjects?: unknown;
     school?: unknown;
+    organization?: unknown;
+    publisher?: unknown;
   };
 
   const levels = Array.isArray(body.teachingLevels)
@@ -56,6 +59,19 @@ export async function PATCH(req: Request) {
     typeof body.school === "string" && body.school.trim().length > 0
       ? body.school.trim().slice(0, 120)
       : null;
+  const organization =
+    "organization" in body
+      ? typeof body.organization === "string" && body.organization.trim().length > 0
+        ? body.organization.trim().slice(0, 120)
+        : null
+      : undefined;
+
+  // One-way self-upgrade: TEACHER → PUBLISHER at signup. Publishers gain the
+  // portal + attribution, but every submission is still reviewed. Downgrades
+  // and other role changes stay staff-only (via direct DB admin).
+  const current = await db.user.findUnique({ where: { id: userId }, select: { role: true } });
+  const upgradeToPublisher =
+    body.publisher === true && current?.role === Role.TEACHER ? Role.PUBLISHER : undefined;
 
   const profile = await db.user.update({
     where: { id: userId },
@@ -63,6 +79,8 @@ export async function PATCH(req: Request) {
       teachingLevels: levels,
       subjects,
       school,
+      ...(organization !== undefined ? { organization } : {}),
+      ...(upgradeToPublisher ? { role: upgradeToPublisher } : {}),
       profileCompleted: true,
     },
     select: profileSelect,
