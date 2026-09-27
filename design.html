@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0d5c46" />
+<title>ChayilResources — Design System Preview</title>
+<style>
+  :root {
+    /* Brand */
+    --brand-900: #064e3b;   /* emerald-900 — logo / headings on light */
+    --brand-800: #065f46;   /* emerald-800 — primary buttons */
+    --brand-700: #047857;   /* emerald-700 — hover / links */
+    --brand-50:  #ecfdf5;   /* emerald-50 — selected chips */
+    --theme:     #0d5c46;   /* PWA theme-color */
+    /* Accent */
+    --accent-500: #f59e0b;  /* amber-500 */
+    --accent-800: #92400e;  /* amber-800 — text on amber-100 */
+    --accent-100: #fef3c7;  /* amber-100 — RECOMMENDED badge */
+    /* Neutrals */
+    --zinc-900: #18181b;
+    --zinc-700: #3f3f46;
+    --zinc-600: #52525b;
+    --zinc-500: #71717a;
+    --zinc-400: #a1a1a2;
+    --zinc-300: #d4d4d8;
+    --zinc-200: #e4e4e7;
+    --zinc-100: #f4f4f5;
+    --white: #ffffff;
+    /* Semantic badges */
+    --ok-bg: #dcfce7;   --ok-tx: #166534;      /* REVIEWED */
+    --info-bg: #dbeafe; --info-tx: #1e40af;    /* CURRICULUM-ALIGNED */
+    --contrib-bg: #f3e8ff; --contrib-tx: #6b21a8; /* CONTRIBUTOR */
+    --danger: #b91c1c;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Geist", "Inter", "Public Sans", Arial, Helvetica, sans-serif;
+    background: var(--white);
+    color: var(--zinc-900);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+  header.hero {
+    background: linear-gradient(135deg, var(--brand-900), var(--theme));
+    color: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  header.hero h1 { margin: 0 0 8px; font-size: 2rem; letter-spacing: -0.02em; }
+  header.hero p { margin: 0; opacity: .9; }
+  section { margin-bottom: 40px; }
+  section > h2 {
+    font-size: 1.25rem; color: var(--brand-900);
+    border-bottom: 2px solid var(--zinc-200);
+    padding-bottom: 8px; margin-bottom: 16px;
+  }
+  section > p.note { color: var(--zinc-600); font-size: .9rem; }
+  code.hex { font-family: ui-monospace, monospace; font-size: .8rem; color: var(--zinc-600); }
+
+  /* ---- Colors ---- */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .swatch { border: 1px solid var(--zinc-200); border-radius: var(--radius); overflow: hidden; }
+  .swatch .chip { height: 64px; }
+  .swatch .meta { padding: 8px 10px; font-size: .8rem; }
+  .swatch .meta strong { display: block; font-size: .85rem; }
+
+  /* ---- Typography ---- */
+  .type-row { border: 1px solid var(--zinc-200); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; }
+  .type-row .label { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--zinc-500); margin-bottom: 4px; }
+  .t-display { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+  .t-h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
+  .t-h2 { font-size: 1.125rem; font-weight: 600; margin: 0; }
+  .t-body { font-size: 1rem; color: var(--zinc-700); margin: 0; }
+  .t-small { font-size: .875rem; color: var(--zinc-600); margin: 0; }
+  .t-caption { font-size: .75rem; color: var(--zinc-500); margin: 0; }
+
+  /* ---- Buttons ---- */
+  .btn-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px; }
+  .btn {
+    display: inline-block; border: 0; cursor: pointer;
+    border-radius: 9999px; padding: 10px 24px;
+    font-size: .95rem; font-weight: 500; text-decoration: none;
+  }
+  .btn-primary { background: var(--brand-800); color: #fff; }
+  .btn-primary:hover { background: var(--brand-700); }
+  .btn-secondary { background: #fff; color: var(--zinc-700); border: 1px solid var(--zinc-300); }
+  .btn-secondary:hover { background: var(--zinc-100); }
+  .btn-danger { background: #fff; color: var(--danger); border: 1px solid #fca5a5; }
+  .btn-soft { background: #dcfce7; color: var(--ok-tx); }
+  .btn-sm { padding: 6px 16px; font-size: .875rem; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .pill {
+    border-radius: 9999px; padding: 8px 16px; font-size: .875rem; font-weight: 500;
+    border: 1px solid var(--zinc-300); background: #fff; color: var(--zinc-700); cursor: pointer;
+  }
+  .pill.on { border-color: var(--brand-800); background: var(--brand-50); color: var(--brand-900); }
+
+  /* ---- Inputs ---- */
+  .field { margin-bottom: 16px; max-width: 480px; }
+  .field label { display: block; font-size: .875rem; font-weight: 500; color: var(--zinc-700); margin-bottom: 4px; }
+  .field input[type="text"], .field input[type="email"], .field input[type="password"],
+  .field select, .field textarea {
+    width: 100%; border: 1px solid var(--zinc-300); border-radius: 6px;
+    padding: 8px 12px; font-size: .95rem; font-family: inherit; background: #fff;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: 2px solid var(--brand-700); outline-offset: 0; border-color: var(--brand-700);
+  }
+  .search-row { display: flex; gap: 8px; max-width: 560px; }
+  .search-row input {
+    flex: 1; border: 1px solid var(--zinc-300); border-radius: 6px; padding: 8px 12px; font-size: .95rem;
+  }
+  .check { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; color: var(--zinc-700); margin-bottom: 8px; }
+  .check input { width: 16px; height: 16px; accent-color: var(--brand-800); margin-top: 2px; }
+
+  /* ---- Badges & card ---- */
+  .badge {
+    display: inline-block; border-radius: 9999px; padding: 2px 10px;
+    font-size: .75rem; font-weight: 500;
+  }
+  .b-ok { background: var(--ok-bg); color: var(--ok-tx); }
+  .b-info { background: var(--info-bg); color: var(--info-tx); }
+  .b-contrib { background: var(--contrib-bg); color: var(--contrib-tx); }
+  .b-rec { background: var(--accent-100); color: var(--accent-800); }
+  .b-prem { background: var(--accent-100); color: var(--accent-800); }
+  .b-neutral { background: var(--zinc-100); color: var(--zinc-700); }
+  .card {
+    border: 1px solid var(--zinc-200); border-radius: var(--radius);
+    background: #fff; padding: 16px; max-width: 480px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  }
+  .card h3 { margin: 8px 0 4px; font-size: 1rem; }
+  .card h3 a { color: var(--zinc-900); text-decoration: none; }
+  .card h3 a:hover { text-decoration: underline; }
+  .card .sub { font-size: .875rem; color: var(--zinc-600); margin: 0; }
+  .card .desc {
+    font-size: .875rem; color: var(--zinc-600); margin: 8px 0 0;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .progress { height: 8px; border-radius: 9999px; background: var(--zinc-100); margin-top: 8px; }
+  .progress > div { height: 8px; border-radius: 9999px; background: var(--brand-700); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>ChayilResources — Design System</h1>
+    <p>Colors · Typography · Buttons · Inputs · Badges · Cards — matches the live app (<code>apps/web</code>, Tailwind v4 + Geist).</p>
+  </header>
+
+  <!-- 1. COLORS -->
+  <section>
+    <h2>1 · Colors</h2>
+    <p class="note">Primary emerald for brand/actions, amber for premium accents, zinc neutrals, semantic badge colors.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#064e3b"></div><div class="meta"><strong>Brand 900</strong><code class="hex">#064e3b</code><br/>logo · headings</div></div>
+      <div class="swatch"><div class="chip" style="background:#065f46"></div><div class="meta"><strong>Brand 800</strong><code class="hex">#065f46</code><br/>primary buttons</div></div>
+      <div class="swatch"><div class="chip" style="background:#047857"></div><div class="meta"><strong>Brand 700</strong><code class="hex">#047857</code><br/>hover · links</div></div>
+      <div class="swatch"><div class="chip" style="background:#0d5c46"></div><div class="meta"><strong>Theme</strong><code class="hex">#0d5c46</code><br/>PWA theme-color</div></div>
+      <div class="swatch"><div class="chip" style="background:#ecfdf5"></div><div class="meta"><strong>Brand 50</strong><code class="hex">#ecfdf5</code><br/>selected chips</div></div>
+      <div class="swatch"><div class="chip" style="background:#f59e0b"></div><div class="meta"><strong>Accent 500</strong><code class="hex">#f59e0b</code><br/>premium accents</div></div>
+      <div class="swatch"><div class="chip" style="background:#fef3c7"></div><div class="meta"><strong>Accent 100</strong><code class="hex">#fef3c7</code><br/>RECOMMENDED badge</div></div>
+      <div class="swatch"><div class="chip" style="background:#18181b"></div><div class="meta"><strong>Zinc 900</strong><code class="hex">#18181b</code><br/>body text</div></div>
+      <div class="swatch"><div class="chip" style="background:#52525b"></div><div class="meta"><strong>Zinc 600</strong><code class="hex">#52525b</code><br/>secondary text</div></div>
+      <div class="swatch"><div class="chip" style="background:#e4e4e7"></div><div class="meta"><strong>Zinc 200</strong><code class="hex">#e4e4e7</code><br/>borders</div></div>
+      <div class="swatch"><div class="chip" style="background:#dcfce7"></div><div class="meta"><strong>OK bg</strong><code class="hex">#dcfce7 / #166534</code><br/>REVIEWED</div></div>
+      <div class="swatch"><div class="chip" style="background:#dbeafe"></div><div class="meta"><strong>Info bg</strong><code class="hex">#dbeafe / #1e40af</code><br/>CURRICULUM-ALIGNED</div></div>
+      <div class="swatch"><div class="chip" style="background:#f3e8ff"></div><div class="meta"><strong>Contrib bg</strong><code class="hex">#f3e8ff / #6b21a8</code><br/>CONTRIBUTOR</div></div>
+      <div class="swatch"><div class="chip" style="background:#ffffff; border-bottom:1px solid #e4e4e7"></div><div class="meta"><strong>White</strong><code class="hex">#ffffff</code><br/>surfaces</div></div>
+    </div>
+  </section>
+
+  <!-- 2. TYPOGRAPHY -->
+  <section>
+    <h2>2 · Typography</h2>
+    <p class="note">Geist (app) with Inter / Public Sans / Arial fallback. Base 16px, relaxed line-height, tight display tracking.</p>
+    <div class="type-row"><div class="label">Display · 36px/800 — hero</div><p class="t-display">Find the right resource, quickly.</p></div>
+    <div class="type-row"><div class="label">H1 · 24px/700 — page titles</div><p class="t-h1">Browse by level</p></div>
+    <div class="type-row"><div class="label">H2 · 18px/600 — section headings</div><p class="t-h2">Recommended for you</p></div>
+    <div class="type-row"><div class="label">Body · 16px — descriptions</div><p class="t-body">ChayilResources is a curriculum-aligned library of textbooks, lesson plans, worksheets and assessments.</p></div>
+    <div class="type-row"><div class="label">Small · 14px — meta text</div><p class="t-small">JHS 2 · English Language · Lesson plan</p></div>
+    <div class="type-row"><div class="label">Caption · 12px — hints, counts</div><p class="t-caption">Because: matches your subject · 3 of 6 steps complete</p></div>
+  </section>
+
+  <!-- 3. BUTTONS -->
+  <section>
+    <h2>3 · Buttons</h2>
+    <p class="note">Pill-shaped, 44px+ touch targets on mobile. Primary emerald for the main action, one primary per view.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary">Browse resources</button>
+      <button class="btn btn-secondary">Search</button>
+      <button class="btn btn-danger">Reject</button>
+      <button class="btn btn-soft">★ Saved</button>
+      <button class="btn btn-primary" disabled>Creating…</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary btn-sm">Approve</button>
+      <button class="btn btn-secondary btn-sm">Add</button>
+      <a class="btn btn-primary btn-sm" href="#">Sign up</a>
+    </div>
+    <div class="btn-row">
+      <button class="pill on">JHS</button>
+      <button class="pill">SHS</button>
+      <button class="pill">Lesson plan</button>
+      <button class="pill">Worksheet</button>
+      <button class="pill">Assessment</button>
+    </div>
+  </section>
+
+  <!-- 4. INPUTS -->
+  <section>
+    <h2>4 · Inputs</h2>
+    <p class="note">6px radius, zinc-300 borders, emerald focus ring. Labels above fields, plain language.</p>
+    <div class="search-row" style="margin-bottom:16px">
+      <input type="text" placeholder="Search by class, subject, topic…" aria-label="Search resources" />
+      <button class="btn btn-primary">Search</button>
+    </div>
+    <div class="field">
+      <label for="in-title">Title</label>
+      <input id="in-title" type="text" value="JHS 2 Fractions Dominoes Game" />
+    </div>
+    <div class="field">
+      <label for="in-level">Level</label>
+      <select id="in-level">
+        <option>Primary</option>
+        <option selected>JHS</option>
+        <option>SHS</option>
+        <option>TVET</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="in-desc">Description</label>
+      <textarea id="in-desc" rows="3">Sample lesson plan: introduction, guided reading, group activity, assessment.</textarea>
+    </div>
+    <div class="check"><input type="checkbox" id="chk-pub" checked /> <label for="chk-pub">I publish educational content (publisher account)</label></div>
+    <div class="check"><input type="checkbox" id="chk-new" checked /> <label for="chk-new">New in your subjects — new resources for classes you teach</label></div>
+    <div class="check"><input type="checkbox" id="chk-email" /> <label for="chk-email">Email me a reset link instead</label></div>
+    <div class="field">
+      <label for="in-file">File (PDF, image, MP4, DOCX, PPTX, TXT — max 25 MB)</label>
+      <input id="in-file" type="file" />
+    </div>
+  </section>
+
+  <!-- 5. BADGES + CARD -->
+  <section>
+    <h2>5 · Badges &amp; resource card</h2>
+    <p class="note">Quality signals teachers trust, plus the standard card used across dashboard, browse, search and packs.</p>
+    <p>
+      <span class="badge b-ok">REVIEWED</span>
+      <span class="badge b-info">CURRICULUM ALIGNED</span>
+      <span class="badge b-contrib">CONTRIBUTOR</span>
+      <span class="badge b-rec">RECOMMENDED</span>
+      <span class="badge b-prem">PREMIUM</span>
+      <span class="badge b-neutral">DRAFT</span>
+    </p>
+    <div class="card" style="margin-top:16px">
+      <div>
+        <span class="badge b-ok">REVIEWED</span>
+        <span class="badge b-info">CURRICULUM ALIGNED</span>
+      </div>
+      <h3><a href="#">JHS 2 Reading Comprehension — Lesson Plan (Sample)</a></h3>
+      <p class="sub">JHS 2 · English Language · JHS · LESSON PLAN</p>
+      <p class="desc">Sample lesson plan: introduction, guided reading, group activity, assessment.</p>
+      <p class="t-caption" style="margin-top:8px">Because: matches your subject · Recently added</p>
+      <div class="progress"><div style="width:67%"></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="t-caption">ChayilResources design tokens · primary <code class="hex">#065f46</code> · theme <code class="hex">#0d5c46</code> · accent <code class="hex">#f59e0b</code> · WCAG AA target (4.5:1 body text).</p>
+  </footer>
+
+</div>
+</body>
+</html>
