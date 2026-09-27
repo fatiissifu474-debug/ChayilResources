@@ -78,13 +78,13 @@ export function AdminModuleForm() {
             )}
           </div>
         ))}
-        <button type="button" onClick={() => setSteps((s) => [...s, { title: "", body: "" }])} className="mt-2 text-sm text-emerald-700 underline">+ Add step</button>
+        <button type="button" onClick={() => setSteps((s) => [...s, { title: "", body: "" }])} className="mt-2 text-sm text-amber-700 underline">+ Add step</button>
       </div>
       <div className="sm:col-span-2">
-        <button type="submit" disabled={pending} className="rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50">
+        <button type="submit" disabled={pending} className="rounded-full bg-amber-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50">
           {pending ? "Creating…" : "Create module draft"}
         </button>
-        {message && <p className="mt-2 text-sm text-emerald-700">{message}</p>}
+        {message && <p className="mt-2 text-sm text-amber-700">{message}</p>}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </div>
     </form>
@@ -123,7 +123,7 @@ export function AdminModuleQueue({ modules }: { modules: ModuleQueueItem[] }) {
         <div key={m.id} className="flex items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm">
           <span className="font-medium text-zinc-900">{m.title} <span className="text-zinc-500">· {m.stepCount} steps</span></span>
           <span className="flex shrink-0 gap-2">
-            <button type="button" disabled={pendingId === m.id} onClick={() => decide(m.id, "approve")} className="rounded-full bg-emerald-800 px-3 py-1 text-xs font-medium text-white disabled:opacity-50">Approve</button>
+            <button type="button" disabled={pendingId === m.id} onClick={() => decide(m.id, "approve")} className="rounded-full bg-amber-800 px-3 py-1 text-xs font-medium text-white disabled:opacity-50">Approve</button>
             <button type="button" disabled={pendingId === m.id} onClick={() => decide(m.id, "reject")} className="rounded-full border border-red-300 px-3 py-1 text-xs font-medium text-red-700 disabled:opacity-50">Reject</button>
           </span>
         </div>

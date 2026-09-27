@@ -78,7 +78,7 @@ export default async function MyResourcesPage() {
           {submissions.length === 0 ? (
             <p className="mt-2 text-sm text-zinc-500">
               Nothing submitted yet.{" "}
-              <Link href="/contribute" className="font-medium text-emerald-700 underline">
+              <Link href="/contribute" className="font-medium text-amber-700 underline">
                 Contribute a resource
               </Link>
             </p>
@@ -86,7 +86,7 @@ export default async function MyResourcesPage() {
             <ul className="mt-2 flex flex-col gap-1.5">
               {submissions.map((s) => (
                 <li key={s.id} className="text-sm">
-                  <Link href={`/resources/${s.id}`} className="text-emerald-900 hover:underline">
+                  <Link href={`/resources/${s.id}`} className="text-amber-900 hover:underline">
                     {s.title}
                   </Link>{" "}
                   <span className="text-zinc-500">— {s.reviewStatus.replace(/_/g, " ")}</span>
@@ -104,7 +104,7 @@ export default async function MyResourcesPage() {
             <ul className="mt-2 flex flex-col gap-1.5">
               {saved.map((s) => (
                 <li key={s.resource.id} className="text-sm">
-                  <Link href={`/resources/${s.resource.id}`} className="text-emerald-900 hover:underline">
+                  <Link href={`/resources/${s.resource.id}`} className="text-amber-900 hover:underline">
                     {s.resource.title}
                   </Link>
                 </li>
@@ -121,7 +121,7 @@ export default async function MyResourcesPage() {
             <ul className="mt-2 flex flex-col gap-1.5">
               {downloads.map((d) => (
                 <li key={d.id} className="text-sm">
-                  <Link href={`/resources/${d.resource.id}`} className="text-emerald-900 hover:underline">
+                  <Link href={`/resources/${d.resource.id}`} className="text-amber-900 hover:underline">
                     {d.resource.title}
                   </Link>
                 </li>
@@ -138,7 +138,7 @@ export default async function MyResourcesPage() {
             <ul className="mt-2 flex flex-col gap-1.5">
               {views.map((v) => (
                 <li key={v.id} className="text-sm">
-                  <Link href={`/resources/${v.resource.id}`} className="text-emerald-900 hover:underline">
+                  <Link href={`/resources/${v.resource.id}`} className="text-amber-900 hover:underline">
                     {v.resource.title}
                   </Link>
                 </li>

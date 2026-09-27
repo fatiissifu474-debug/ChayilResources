@@ -28,7 +28,7 @@ export function PackSaveAll({ packId, authed, itemCount }: { packId: string; aut
         type="button"
         onClick={saveAll}
         disabled={pending}
-        className="rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded-full bg-amber-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
       >
         {pending ? "Saving…" : `Save all ${itemCount} resources`}
       </button>

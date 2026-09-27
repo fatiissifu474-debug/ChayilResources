@@ -35,7 +35,7 @@ export function FeedbackWidget({
   if (!authed) {
     return (
       <p className="text-sm text-zinc-600">
-        <Link href="/login" className="font-medium text-emerald-700 underline">
+        <Link href="/login" className="font-medium text-amber-700 underline">
           Log in
         </Link>{" "}
         to rate this resource.
@@ -91,7 +91,7 @@ export function FeedbackWidget({
             }}
             className={`rounded-full border px-3 py-1.5 text-sm ${
               kind === k
-                ? "border-emerald-800 bg-emerald-50 text-emerald-900"
+                ? "border-amber-800 bg-amber-50 text-amber-900"
                 : "border-zinc-300 text-zinc-700"
             }`}
           >
@@ -112,14 +112,14 @@ export function FeedbackWidget({
               type="button"
               onClick={submit}
               disabled={pending}
-              className="rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
+              className="rounded-full bg-amber-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
             >
               {pending ? "Sending…" : "Submit feedback"}
             </button>
           </div>
         </div>
       )}
-      {thanks && <p className="mt-2 text-sm text-emerald-700">Thanks — your feedback helps improve quality.</p>}
+      {thanks && <p className="mt-2 text-sm text-amber-700">Thanks — your feedback helps improve quality.</p>}
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );

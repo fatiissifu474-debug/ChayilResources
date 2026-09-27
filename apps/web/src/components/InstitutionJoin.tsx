@@ -45,12 +45,12 @@ export function InstitutionJoin() {
           type="button"
           disabled={pending || !code.trim()}
           onClick={join}
-          className="shrink-0 rounded-full bg-emerald-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+          className="shrink-0 rounded-full bg-amber-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
         >
           Join
         </button>
       </div>
-      {message && <p className="mt-2 text-sm text-emerald-700">{message}</p>}
+      {message && <p className="mt-2 text-sm text-amber-700">{message}</p>}
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   );

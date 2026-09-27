@@ -110,10 +110,10 @@ export function AdminCreateForm() {
       <label className="text-sm font-medium text-zinc-700">Copyright holder*<input required value={copyrightHolder} onChange={(e) => setCopyrightHolder(e.target.value)} className={inputCls} /></label>
       <label className="text-sm font-medium text-zinc-700">Permitted use*<input required value={permittedUse} onChange={(e) => setPermittedUse(e.target.value)} className={inputCls} /></label>
       <div className="sm:col-span-2">
-        <button type="submit" disabled={pending} className="rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50">
+        <button type="submit" disabled={pending} className="rounded-full bg-amber-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50">
           {pending ? "Creating…" : "Create draft"}
         </button>
-        {message && <p className="mt-2 text-sm text-emerald-700">{message}</p>}
+        {message && <p className="mt-2 text-sm text-amber-700">{message}</p>}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </div>
     </form>

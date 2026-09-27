@@ -38,9 +38,9 @@ export default async function LearnPage() {
                 <Link
                   key={m.id}
                   href={`/learn/${m.slug}`}
-                  className="rounded-lg border border-zinc-200 bg-white p-5 hover:border-emerald-700"
+                  className="rounded-lg border border-zinc-200 bg-white p-5 hover:border-amber-700"
                 >
-                  <h2 className="font-semibold text-emerald-900">{m.title}</h2>
+                  <h2 className="font-semibold text-amber-900">{m.title}</h2>
                   <p className="mt-1 text-sm text-zinc-600">
                     {total} steps
                     {m.durationMinutes ? ` · ~${m.durationMinutes} min` : ""}
@@ -50,7 +50,7 @@ export default async function LearnPage() {
                   {p && (
                     <div className="mt-2 flex items-center gap-2">
                       <div className="h-2 w-full rounded-full bg-zinc-100">
-                        <div className="h-2 rounded-full bg-emerald-700" style={{ width: `${pct}%` }} />
+                        <div className="h-2 rounded-full bg-amber-700" style={{ width: `${pct}%` }} />
                       </div>
                       <span className="text-xs text-zinc-500">{p.completed ? "Done ✓" : `${pct}%`}</span>
                     </div>

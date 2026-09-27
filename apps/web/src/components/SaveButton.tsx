@@ -46,7 +46,7 @@ export function SaveButton({
       onClick={toggle}
       disabled={pending}
       className={`rounded-full px-5 py-2 text-sm font-medium disabled:opacity-50 ${
-        saved ? "bg-emerald-100 text-emerald-900" : "bg-emerald-800 text-white"
+        saved ? "bg-amber-100 text-amber-900" : "bg-amber-800 text-white"
       }`}
     >
       {pending ? "…" : saved ? "★ Saved" : "☆ Save"}

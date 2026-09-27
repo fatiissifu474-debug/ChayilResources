@@ -57,7 +57,7 @@ export function AdminQueue({ initialPending }: { initialPending: QueueItem[] }) 
               type="button"
               disabled={pendingId === r.id}
               onClick={() => decide(r.id, "approve")}
-              className="rounded-full bg-emerald-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+              className="rounded-full bg-amber-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
             >
               Approve
             </button>

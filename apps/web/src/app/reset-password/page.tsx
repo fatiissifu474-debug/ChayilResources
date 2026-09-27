@@ -29,7 +29,7 @@ export default function ResetPasswordPage() {
       <h1 className="text-2xl font-bold text-zinc-900">Reset your password</h1>
       <p className="mt-2 text-sm text-zinc-600">
         Remember it?{" "}
-        <Link href="/login" className="font-medium text-emerald-700 underline">
+        <Link href="/login" className="font-medium text-amber-700 underline">
           Log in
         </Link>
       </p>
@@ -54,7 +54,7 @@ export default function ResetPasswordPage() {
           <button
             type="submit"
             disabled={pending}
-            className="rounded-full bg-emerald-800 px-5 py-2.5 font-medium text-white disabled:opacity-50"
+            className="rounded-full bg-amber-800 px-5 py-2.5 font-medium text-white disabled:opacity-50"
           >
             {pending ? "Sending…" : "Send reset link"}
           </button>

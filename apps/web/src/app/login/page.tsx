@@ -31,7 +31,7 @@ export default function LoginPage() {
       <h1 className="text-2xl font-bold text-zinc-900">Welcome back</h1>
       <p className="mt-2 text-sm text-zinc-600">
         New here?{" "}
-        <Link href="/signup" className="font-medium text-emerald-700 underline">
+        <Link href="/signup" className="font-medium text-amber-700 underline">
           Create an account
         </Link>
       </p>
@@ -62,12 +62,12 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-full bg-emerald-800 px-5 py-2.5 font-medium text-white disabled:opacity-50"
+          className="rounded-full bg-amber-800 px-5 py-2.5 font-medium text-white disabled:opacity-50"
         >
           {pending ? "Logging in…" : "Log in"}
         </button>
         <p className="text-sm text-zinc-600">
-          <Link href="/reset-password" className="font-medium text-emerald-700 underline">
+          <Link href="/reset-password" className="font-medium text-amber-700 underline">
             Forgot your password?
           </Link>
         </p>

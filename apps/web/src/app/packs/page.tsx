@@ -30,9 +30,9 @@ export default async function PacksPage() {
               <Link
                 key={p.id}
                 href={`/packs/${p.id}`}
-                className="rounded-lg border border-zinc-200 bg-white p-5 hover:border-emerald-700"
+                className="rounded-lg border border-zinc-200 bg-white p-5 hover:border-amber-700"
               >
-                <h2 className="font-semibold text-emerald-900">{p.title}</h2>
+                <h2 className="font-semibold text-amber-900">{p.title}</h2>
                 <p className="mt-1 text-sm text-zinc-600">
                   {[p.classLevel?.name, p.subject?.name, p.level].filter(Boolean).join(" · ")}
                   {"  "}· {p._count.items} resources

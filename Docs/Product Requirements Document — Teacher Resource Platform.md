@@ -936,3 +936,28 @@ That should be the ultimate product vision.
 **For teachers across Primary, JHS, SHS and TVET who spend too much time searching for appropriate teaching resources, the Teacher Resource Platform is a curriculum-aligned digital resource library and lesson-preparation companion that brings textbooks, teacher guides, lesson plans, worksheets, assessments and other teaching resources into one easy-to-navigate platform.**
 
 Unlike a conventional digital library, it organizes resources around the **teacher's actual classroom needs**, enabling teachers to search, browse, save and access relevant resources for their classes and topics.
+
+---
+
+# 40. Design Notes (living log)
+
+## 2026-09-26 — Brand colour refined: emerald → gold
+
+**Decision:** the brand colour changes from emerald to gold across the design system.
+
+**Previous → new mapping:**
+
+| Token | Before (emerald) | After (gold) |
+|---|---|---|
+| Brand 900 (logo/headings) | `#064e3b` | `#78350f` |
+| Brand 800 (primary buttons) | `#065f46` | `#92400e` |
+| Brand 700 (hover/links) | `#047857` | `#b45309` |
+| Brand 50 (selected chips) | `#ecfdf5` | `#fffbeb` |
+| PWA theme-color | `#0d5c46` | `#92400e` |
+| Accent | amber `#f59e0b` | deep emerald `#047857` (secondary highlights) |
+| RECOMMENDED badge | amber tint `#fef3c7`/`#92400e` | sky tint `#e0f2fe`/`#075985` (kept distinct from gold brand) |
+| PREMIUM badge | — | gold tint `#fef3c7`/`#92400e` |
+
+**Rationale:** gold gives ChayilResources ("chayil" — excellence/strength) a distinctive, warm identity; emerald steps back to a secondary role. REVIEWED (green), CURRICULUM-ALIGNED (blue) and CONTRIBUTOR (purple) badge semantics are unchanged. Gold-on-white pairings (`#92400e` on `#ffffff` ≈ 7:1) keep the WCAG AA 4.5:1 target.
+
+**Scope of this change:** `design.html` preview updated (variables, swatches, buttons, inputs, badges, card). App-wide rollout **completed 2026-09-26**: 34 component/page files (`emerald-*` → `amber-*`), `manifest.webmanifest` + layout `viewport.themeColor` → `#92400e`; REVIEWED green badges unchanged. Verified: `tsc` clean, production build green, live visual pass (home/login/browse/learn render gold, zero `emerald-` in served HTML).

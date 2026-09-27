@@ -30,7 +30,7 @@ export function CollectionAdder({ resourceId, authed }: { resourceId: string; au
   if (!authed) {
     return (
       <p className="text-sm text-zinc-600">
-        <Link href="/login" className="font-medium text-emerald-700 underline">Log in</Link>{" "}
+        <Link href="/login" className="font-medium text-amber-700 underline">Log in</Link>{" "}
         to organize this into a collection.
       </p>
     );
@@ -88,7 +88,7 @@ export function CollectionAdder({ resourceId, authed }: { resourceId: string; au
             type="button"
             disabled={pending || !selected}
             onClick={() => addTo(selected)}
-            className="shrink-0 rounded-full bg-emerald-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+            className="shrink-0 rounded-full bg-amber-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
           >
             Add
           </button>

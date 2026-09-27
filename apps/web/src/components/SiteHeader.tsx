@@ -14,7 +14,7 @@ export async function SiteHeader() {
   return (
     <header className="border-b border-zinc-200 bg-white">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
-        <Link href="/" className="font-bold text-emerald-900">
+        <Link href="/" className="font-bold text-amber-900">
           ChayilResources
         </Link>
         <nav className="flex items-center gap-4 text-sm">
@@ -67,7 +67,7 @@ export async function SiteHeader() {
               </Link>
               <Link
                 href="/signup"
-                className="rounded-full bg-emerald-800 px-4 py-1.5 font-medium text-white"
+                className="rounded-full bg-amber-800 px-4 py-1.5 font-medium text-white"
               >
                 Sign up
               </Link>

@@ -57,7 +57,7 @@ export default async function BrowsePage({
               <Link
                 key={l}
                 href={`/browse?level=${l}`}
-                className="rounded-lg border border-zinc-200 bg-white p-6 text-lg font-semibold text-emerald-900 hover:border-emerald-700"
+                className="rounded-lg border border-zinc-200 bg-white p-6 text-lg font-semibold text-amber-900 hover:border-amber-700"
               >
                 {LEVEL_LABELS[l]}
               </Link>
@@ -134,7 +134,7 @@ export default async function BrowsePage({
               <Link
                 key={c.id}
                 href={qs({ classId: c.id })}
-                className="rounded-lg border border-zinc-200 bg-white p-4 font-medium text-emerald-900 hover:border-emerald-700"
+                className="rounded-lg border border-zinc-200 bg-white p-4 font-medium text-amber-900 hover:border-amber-700"
               >
                 {c.name}
               </Link>
@@ -148,7 +148,7 @@ export default async function BrowsePage({
               <Link
                 key={s.id}
                 href={qs({ classId: selectedClass.id, subjectId: s.id })}
-                className="rounded-lg border border-zinc-200 bg-white p-4 font-medium text-emerald-900 hover:border-emerald-700"
+                className="rounded-lg border border-zinc-200 bg-white p-4 font-medium text-amber-900 hover:border-amber-700"
               >
                 {s.name}
               </Link>
@@ -164,7 +164,7 @@ export default async function BrowsePage({
             <div className="flex flex-wrap gap-2">
               <Link
                 href={qs({ classId: selectedClass.id, subjectId: selectedSubject.id })}
-                className={`rounded-full border px-3 py-1.5 text-sm ${!validType ? "border-emerald-800 bg-emerald-50 text-emerald-900" : "border-zinc-300 text-zinc-700"}`}
+                className={`rounded-full border px-3 py-1.5 text-sm ${!validType ? "border-amber-800 bg-amber-50 text-amber-900" : "border-zinc-300 text-zinc-700"}`}
               >
                 All types
               </Link>
@@ -172,7 +172,7 @@ export default async function BrowsePage({
                 <Link
                   key={t}
                   href={qs({ classId: selectedClass.id, subjectId: selectedSubject.id, type: t })}
-                  className={`rounded-full border px-3 py-1.5 text-sm ${validType === t ? "border-emerald-800 bg-emerald-50 text-emerald-900" : "border-zinc-300 text-zinc-700"}`}
+                  className={`rounded-full border px-3 py-1.5 text-sm ${validType === t ? "border-amber-800 bg-amber-50 text-amber-900" : "border-zinc-300 text-zinc-700"}`}
                 >
                   {t.replace(/_/g, " ")}
                 </Link>

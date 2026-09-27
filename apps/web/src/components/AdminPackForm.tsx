@@ -86,10 +86,10 @@ export function AdminPackForm() {
         </select>
       </label>
       <div className="sm:col-span-2">
-        <button type="submit" disabled={pending} className="rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50">
+        <button type="submit" disabled={pending} className="rounded-full bg-amber-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50">
           {pending ? "Creating…" : "Create pack draft"}
         </button>
-        {message && <p className="mt-2 text-sm text-emerald-700">{message}</p>}
+        {message && <p className="mt-2 text-sm text-amber-700">{message}</p>}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </div>
     </form>
@@ -128,7 +128,7 @@ export function AdminPackQueue({ packs }: { packs: PackQueueItem[] }) {
         <div key={p.id} className="flex items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm">
           <span className="font-medium text-zinc-900">{p.title} <span className="text-zinc-500">· {p.itemCount} items</span></span>
           <span className="flex shrink-0 gap-2">
-            <button type="button" disabled={pendingId === p.id} onClick={() => decide(p.id, "approve")} className="rounded-full bg-emerald-800 px-3 py-1 text-xs font-medium text-white disabled:opacity-50">Approve</button>
+            <button type="button" disabled={pendingId === p.id} onClick={() => decide(p.id, "approve")} className="rounded-full bg-amber-800 px-3 py-1 text-xs font-medium text-white disabled:opacity-50">Approve</button>
             <button type="button" disabled={pendingId === p.id} onClick={() => decide(p.id, "reject")} className="rounded-full border border-red-300 px-3 py-1 text-xs font-medium text-red-700 disabled:opacity-50">Reject</button>
           </span>
         </div>

@@ -83,7 +83,7 @@ export default async function SearchPage({
           </select>
           <button
             type="submit"
-            className="rounded-full bg-emerald-800 px-5 py-2 font-medium text-white"
+            className="rounded-full bg-amber-800 px-5 py-2 font-medium text-white"
           >
             Search
           </button>

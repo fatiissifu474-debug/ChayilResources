@@ -16,7 +16,7 @@ export default function Home() {
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href="/browse"
-            className="rounded-full bg-emerald-800 px-6 py-2.5 font-medium text-white"
+            className="rounded-full bg-amber-800 px-6 py-2.5 font-medium text-white"
           >
             Browse resources
           </Link>

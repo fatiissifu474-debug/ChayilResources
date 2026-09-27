@@ -62,7 +62,7 @@ export default function ContributePage() {
         <h1 className="text-2xl font-bold text-zinc-900">Thank you!</h1>
         <p className="mt-2 text-zinc-600">
           Your resource was submitted and is awaiting review. You can track it under{" "}
-          <Link href="/my-resources" className="font-medium text-emerald-700 underline">
+          <Link href="/my-resources" className="font-medium text-amber-700 underline">
             My resources → My contributions
           </Link>
           .
@@ -108,7 +108,7 @@ export default function ContributePage() {
         <label className="text-sm font-medium text-zinc-700 sm:col-span-2">File (optional — PDF, image, MP4, DOCX, PPTX, TXT, max 25 MB)<input ref={fileRef} name="file" type="file" className="mt-1 text-sm" /></label>
         {error && <p className="text-sm text-red-600 sm:col-span-2">{error}</p>}
         <div className="sm:col-span-2">
-          <button type="submit" disabled={pending} className="rounded-full bg-emerald-800 px-6 py-2.5 font-medium text-white disabled:opacity-50">
+          <button type="submit" disabled={pending} className="rounded-full bg-amber-800 px-6 py-2.5 font-medium text-white disabled:opacity-50">
             {pending ? "Submitting…" : "Submit for review"}
           </button>
         </div>

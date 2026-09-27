@@ -46,7 +46,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
         {viewer && (
           <div className="mt-4 flex items-center gap-3 rounded-lg border border-zinc-200 bg-white p-4">
             <div className="h-2 w-full rounded-full bg-zinc-100">
-              <div className="h-2 rounded-full bg-emerald-700" style={{ width: `${pct}%` }} />
+              <div className="h-2 rounded-full bg-amber-700" style={{ width: `${pct}%` }} />
             </div>
             <span className="shrink-0 text-sm text-zinc-600">
               {progress?.completed ? "Completed ✓" : `${done}/${total} steps`}
@@ -73,7 +73,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
 
         {!viewer && (
           <p className="mt-6 text-sm text-zinc-600">
-            <Link href="/login" className="font-medium text-emerald-700 underline">Log in</Link>{" "}
+            <Link href="/login" className="font-medium text-amber-700 underline">Log in</Link>{" "}
             to track your progress through this module.
           </p>
         )}

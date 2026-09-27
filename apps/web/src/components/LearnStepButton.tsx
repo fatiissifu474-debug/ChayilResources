@@ -17,7 +17,7 @@ export function LearnStepButton({
   const [pending, setPending] = useState(false);
 
   if (done) {
-    return <span className="text-sm font-medium text-emerald-700">Done ✓</span>;
+    return <span className="text-sm font-medium text-amber-700">Done ✓</span>;
   }
 
   async function mark() {
@@ -36,7 +36,7 @@ export function LearnStepButton({
       type="button"
       onClick={mark}
       disabled={pending}
-      className="rounded-full bg-emerald-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+      className="rounded-full bg-amber-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50"
     >
       {pending ? "Saving…" : "Mark step done"}
     </button>

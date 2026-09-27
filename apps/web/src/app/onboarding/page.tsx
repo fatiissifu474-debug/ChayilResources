@@ -107,7 +107,7 @@ export default function OnboardingPage() {
               onClick={() => setLevels(toggle(levels, l.value))}
               className={`rounded-full border px-4 py-2 text-sm font-medium ${
                 levels.includes(l.value)
-                  ? "border-emerald-800 bg-emerald-800 text-white"
+                  ? "border-amber-800 bg-amber-800 text-white"
                   : "border-zinc-300 text-zinc-700"
               }`}
             >
@@ -127,7 +127,7 @@ export default function OnboardingPage() {
               onClick={() => setClassIds(toggle(classIds, c.id))}
               className={`rounded-full border px-3 py-1.5 text-sm ${
                 classIds.includes(c.id)
-                  ? "border-emerald-800 bg-emerald-50 text-emerald-900"
+                  ? "border-amber-800 bg-amber-50 text-amber-900"
                   : "border-zinc-300 text-zinc-700"
               }`}
             >
@@ -147,7 +147,7 @@ export default function OnboardingPage() {
               onClick={() => setSubjectNames(toggle(subjectNames, s.name))}
               className={`rounded-full border px-3 py-1.5 text-sm ${
                 subjectNames.includes(s.name)
-                  ? "border-emerald-800 bg-emerald-50 text-emerald-900"
+                  ? "border-amber-800 bg-amber-50 text-amber-900"
                   : "border-zinc-300 text-zinc-700"
               }`}
             >
@@ -175,7 +175,7 @@ export default function OnboardingPage() {
         type="button"
         onClick={onSave}
         disabled={saving || levels.length === 0}
-        className="mt-8 rounded-full bg-emerald-800 px-6 py-2.5 font-medium text-white disabled:opacity-50"
+        className="mt-8 rounded-full bg-amber-800 px-6 py-2.5 font-medium text-white disabled:opacity-50"
       >
         {saving ? "Saving…" : "Save and go to dashboard"}
       </button>

@@ -44,7 +44,7 @@ function ConfirmForm() {
     return (
       <p className="mt-6 rounded-lg border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
         Password updated.{" "}
-        <Link href="/login" className="font-medium text-emerald-700 underline">
+        <Link href="/login" className="font-medium text-amber-700 underline">
           Log in
         </Link>
       </p>
@@ -80,7 +80,7 @@ function ConfirmForm() {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-full bg-emerald-800 px-5 py-2.5 font-medium text-white disabled:opacity-50"
+        className="rounded-full bg-amber-800 px-5 py-2.5 font-medium text-white disabled:opacity-50"
       >
         {pending ? "Updating…" : "Set new password"}
       </button>

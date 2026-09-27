@@ -52,14 +52,14 @@ export default async function PublisherPage() {
           {counts.map((c) => `${c._count.reviewStatus} ${c.reviewStatus.replace(/_/g, " ").toLowerCase()}`).join(" · ") || "No submissions yet."}
         </p>
         <div className="mt-4">
-          <Link href="/contribute" className="rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white">
+          <Link href="/contribute" className="rounded-full bg-amber-800 px-5 py-2 text-sm font-medium text-white">
             Submit a resource
           </Link>
         </div>
         <div className="mt-4 flex flex-col gap-2">
           {submissions.map((s) => (
             <div key={s.id} className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm">
-              <Link href={`/resources/${s.id}`} className="font-medium text-emerald-900 hover:underline">
+              <Link href={`/resources/${s.id}`} className="font-medium text-amber-900 hover:underline">
                 {s.title}
               </Link>{" "}
               <span className="text-zinc-500">

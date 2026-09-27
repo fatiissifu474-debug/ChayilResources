@@ -107,7 +107,7 @@ export function AdminAccessManager({ initial }: { initial: AccessManagerData }) 
         <div className="mt-2 flex flex-wrap gap-2">
           <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="teacher@example.com" className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm" />
           <input value={days} onChange={(e) => setDays(e.target.value)} placeholder="Days (blank = no expiry)" inputMode="numeric" className="w-48 rounded-md border border-zinc-300 px-3 py-1.5 text-sm" />
-          <button type="button" disabled={pending} onClick={grant} className="rounded-full bg-emerald-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50">Grant</button>
+          <button type="button" disabled={pending} onClick={grant} className="rounded-full bg-amber-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50">Grant</button>
         </div>
         {initial.entitlements.length > 0 && (
           <ul className="mt-2 text-sm text-zinc-600">
@@ -122,7 +122,7 @@ export function AdminAccessManager({ initial }: { initial: AccessManagerData }) 
         <h3 className="text-sm font-semibold text-zinc-900">Institutions</h3>
         <div className="mt-2 flex gap-2">
           <input value={instName} onChange={(e) => setInstName(e.target.value)} placeholder="e.g. Sunrise Basic School" className="w-full rounded-md border border-zinc-300 px-3 py-1.5 text-sm" />
-          <button type="button" disabled={pending} onClick={createInstitution} className="shrink-0 rounded-full bg-emerald-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50">Create</button>
+          <button type="button" disabled={pending} onClick={createInstitution} className="shrink-0 rounded-full bg-amber-800 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-50">Create</button>
         </div>
         <div className="mt-3 flex flex-col gap-3">
           {initial.institutions.map((inst) => (
@@ -154,7 +154,7 @@ export function AdminAccessManager({ initial }: { initial: AccessManagerData }) 
         </div>
       </div>
 
-      {message && <p className="text-sm text-emerald-700">{message}</p>}
+      {message && <p className="text-sm text-amber-700">{message}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );

@@ -45,7 +45,7 @@ export function PublisherUpgrade() {
           type="button"
           disabled={pending}
           onClick={upgrade}
-          className="shrink-0 rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="shrink-0 rounded-full bg-amber-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
         >
           Register
         </button>

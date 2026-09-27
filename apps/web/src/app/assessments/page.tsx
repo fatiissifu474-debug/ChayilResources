@@ -39,7 +39,7 @@ export default async function AssessmentsPage({
               <Link
                 key={l}
                 href={`/assessments?level=${l}`}
-                className="rounded-lg border border-zinc-200 bg-white p-6 text-lg font-semibold text-emerald-900 hover:border-emerald-700"
+                className="rounded-lg border border-zinc-200 bg-white p-6 text-lg font-semibold text-amber-900 hover:border-amber-700"
               >
                 {LEVEL_LABELS[l]}
               </Link>
@@ -88,7 +88,7 @@ export default async function AssessmentsPage({
               <Link
                 key={c.id}
                 href={`/assessments?level=${validLevel}&classId=${c.id}`}
-                className="rounded-lg border border-zinc-200 bg-white p-4 font-medium text-emerald-900 hover:border-emerald-700"
+                className="rounded-lg border border-zinc-200 bg-white p-4 font-medium text-amber-900 hover:border-amber-700"
               >
                 {c.name}
               </Link>

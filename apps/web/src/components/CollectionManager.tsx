@@ -77,7 +77,7 @@ export function CollectionManager({ initial }: { initial: ManagerCollection[] })
         <button
           type="submit"
           disabled={pending || !name.trim()}
-          className="shrink-0 rounded-full bg-emerald-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="shrink-0 rounded-full bg-amber-800 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
         >
           Create
         </button>
@@ -108,7 +108,7 @@ export function CollectionManager({ initial }: { initial: ManagerCollection[] })
               <ul className="mt-2 flex flex-col gap-1.5">
                 {c.items.map((item) => (
                   <li key={item.resourceId} className="flex items-center justify-between gap-2 text-sm">
-                    <Link href={`/resources/${item.resourceId}`} className="text-emerald-900 hover:underline">
+                    <Link href={`/resources/${item.resourceId}`} className="text-amber-900 hover:underline">
                       {item.title}
                       <span className="text-zinc-500">
                         {" "}· {[item.className, item.subjectName].filter(Boolean).join(" · ")}

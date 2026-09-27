@@ -66,7 +66,7 @@ export function NotificationPrefsForm() {
               checked={prefs[row.key]}
               onChange={() => toggle(row.key)}
               disabled={saving}
-              className="h-4 w-4 accent-emerald-800"
+              className="h-4 w-4 accent-amber-800"
             />
             <span>
               <span className="font-medium text-zinc-900">{row.label}</span>{" "}

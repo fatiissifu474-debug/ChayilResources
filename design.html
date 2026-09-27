@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#0d5c46" />
+<meta name="theme-color" content="#92400e" />
 <title>ChayilResources — Design System Preview</title>
 <style>
   :root {
-    /* Brand */
-    --brand-900: #064e3b;   /* emerald-900 — logo / headings on light */
-    --brand-800: #065f46;   /* emerald-800 — primary buttons */
-    --brand-700: #047857;   /* emerald-700 — hover / links */
-    --brand-50:  #ecfdf5;   /* emerald-50 — selected chips */
-    --theme:     #0d5c46;   /* PWA theme-color */
-    /* Accent */
-    --accent-500: #f59e0b;  /* amber-500 */
-    --accent-800: #92400e;  /* amber-800 — text on amber-100 */
-    --accent-100: #fef3c7;  /* amber-100 — RECOMMENDED badge */
+    /* Brand — GOLD (refined 2026-09-26, see PRD design notes) */
+    --brand-900: #78350f;   /* amber-900 — logo / headings on light */
+    --brand-800: #92400e;   /* amber-800 — primary buttons */
+    --brand-700: #b45309;   /* amber-700 — hover / links */
+    --brand-50:  #fffbeb;   /* amber-50 — selected chips */
+    --theme:     #92400e;   /* PWA theme-color */
+    /* Secondary accent (formerly brand) */
+    --accent-500: #047857;  /* emerald-700 — secondary highlights */
+    --accent-800: #92400e;  /* amber-800 — text on gold tints */
+    --accent-100: #fef3c7;  /* amber-100 — PREMIUM badge */
     /* Neutrals */
     --zinc-900: #18181b;
     --zinc-700: #3f3f46;
@@ -31,6 +31,7 @@
     --ok-bg: #dcfce7;   --ok-tx: #166534;      /* REVIEWED */
     --info-bg: #dbeafe; --info-tx: #1e40af;    /* CURRICULUM-ALIGNED */
     --contrib-bg: #f3e8ff; --contrib-tx: #6b21a8; /* CONTRIBUTOR */
+    --rec-bg: #e0f2fe;  --rec-tx: #075985;      /* RECOMMENDED (sky — kept distinct from gold brand) */
     --danger: #b91c1c;
     --radius: 8px;
   }
@@ -125,7 +126,7 @@
   .b-ok { background: var(--ok-bg); color: var(--ok-tx); }
   .b-info { background: var(--info-bg); color: var(--info-tx); }
   .b-contrib { background: var(--contrib-bg); color: var(--contrib-tx); }
-  .b-rec { background: var(--accent-100); color: var(--accent-800); }
+  .b-rec { background: var(--rec-bg); color: var(--rec-tx); }
   .b-prem { background: var(--accent-100); color: var(--accent-800); }
   .b-neutral { background: var(--zinc-100); color: var(--zinc-700); }
   .card {
@@ -150,21 +151,21 @@
 
   <header class="hero">
     <h1>ChayilResources — Design System</h1>
-    <p>Colors · Typography · Buttons · Inputs · Badges · Cards — matches the live app (<code>apps/web</code>, Tailwind v4 + Geist).</p>
+    <p>Colors · Typography · Buttons · Inputs · Badges · Cards — matches the live app (<code>apps/web</code>, Tailwind v4 + Geist). Brand refined to <strong>gold</strong> on 2026-09-26.</p>
   </header>
 
   <!-- 1. COLORS -->
   <section>
     <h2>1 · Colors</h2>
-    <p class="note">Primary emerald for brand/actions, amber for premium accents, zinc neutrals, semantic badge colors.</p>
+    <p class="note">Primary <strong>gold</strong> for brand/actions, deep emerald as secondary accent, zinc neutrals, semantic badge colors.</p>
     <div class="swatches">
-      <div class="swatch"><div class="chip" style="background:#064e3b"></div><div class="meta"><strong>Brand 900</strong><code class="hex">#064e3b</code><br/>logo · headings</div></div>
-      <div class="swatch"><div class="chip" style="background:#065f46"></div><div class="meta"><strong>Brand 800</strong><code class="hex">#065f46</code><br/>primary buttons</div></div>
-      <div class="swatch"><div class="chip" style="background:#047857"></div><div class="meta"><strong>Brand 700</strong><code class="hex">#047857</code><br/>hover · links</div></div>
-      <div class="swatch"><div class="chip" style="background:#0d5c46"></div><div class="meta"><strong>Theme</strong><code class="hex">#0d5c46</code><br/>PWA theme-color</div></div>
-      <div class="swatch"><div class="chip" style="background:#ecfdf5"></div><div class="meta"><strong>Brand 50</strong><code class="hex">#ecfdf5</code><br/>selected chips</div></div>
-      <div class="swatch"><div class="chip" style="background:#f59e0b"></div><div class="meta"><strong>Accent 500</strong><code class="hex">#f59e0b</code><br/>premium accents</div></div>
-      <div class="swatch"><div class="chip" style="background:#fef3c7"></div><div class="meta"><strong>Accent 100</strong><code class="hex">#fef3c7</code><br/>RECOMMENDED badge</div></div>
+      <div class="swatch"><div class="chip" style="background:#78350f"></div><div class="meta"><strong>Brand 900</strong><code class="hex">#78350f</code><br/>logo · headings</div></div>
+      <div class="swatch"><div class="chip" style="background:#92400e"></div><div class="meta"><strong>Brand 800</strong><code class="hex">#92400e</code><br/>primary buttons</div></div>
+      <div class="swatch"><div class="chip" style="background:#b45309"></div><div class="meta"><strong>Brand 700</strong><code class="hex">#b45309</code><br/>hover · links</div></div>
+      <div class="swatch"><div class="chip" style="background:#92400e"></div><div class="meta"><strong>Theme</strong><code class="hex">#92400e</code><br/>PWA theme-color</div></div>
+      <div class="swatch"><div class="chip" style="background:#fffbeb"></div><div class="meta"><strong>Brand 50</strong><code class="hex">#fffbeb</code><br/>selected chips</div></div>
+      <div class="swatch"><div class="chip" style="background:#047857"></div><div class="meta"><strong>Accent 700</strong><code class="hex">#047857</code><br/>secondary highlights</div></div>
+      <div class="swatch"><div class="chip" style="background:#fef3c7"></div><div class="meta"><strong>Accent 100</strong><code class="hex">#fef3c7</code><br/>PREMIUM badge</div></div>
       <div class="swatch"><div class="chip" style="background:#18181b"></div><div class="meta"><strong>Zinc 900</strong><code class="hex">#18181b</code><br/>body text</div></div>
       <div class="swatch"><div class="chip" style="background:#52525b"></div><div class="meta"><strong>Zinc 600</strong><code class="hex">#52525b</code><br/>secondary text</div></div>
       <div class="swatch"><div class="chip" style="background:#e4e4e7"></div><div class="meta"><strong>Zinc 200</strong><code class="hex">#e4e4e7</code><br/>borders</div></div>
@@ -190,7 +191,7 @@
   <!-- 3. BUTTONS -->
   <section>
     <h2>3 · Buttons</h2>
-    <p class="note">Pill-shaped, 44px+ touch targets on mobile. Primary emerald for the main action, one primary per view.</p>
+    <p class="note">Pill-shaped, 44px+ touch targets on mobile. Primary gold for the main action, one primary per view.</p>
     <div class="btn-row">
       <button class="btn btn-primary">Browse resources</button>
       <button class="btn btn-secondary">Search</button>
@@ -215,7 +216,7 @@
   <!-- 4. INPUTS -->
   <section>
     <h2>4 · Inputs</h2>
-    <p class="note">6px radius, zinc-300 borders, emerald focus ring. Labels above fields, plain language.</p>
+    <p class="note">6px radius, zinc-300 borders, gold focus ring. Labels above fields, plain language.</p>
     <div class="search-row" style="margin-bottom:16px">
       <input type="text" placeholder="Search by class, subject, topic…" aria-label="Search resources" />
       <button class="btn btn-primary">Search</button>
@@ -272,7 +273,7 @@
   </section>
 
   <footer>
-    <p class="t-caption">ChayilResources design tokens · primary <code class="hex">#065f46</code> · theme <code class="hex">#0d5c46</code> · accent <code class="hex">#f59e0b</code> · WCAG AA target (4.5:1 body text).</p>
+    <p class="t-caption">ChayilResources design tokens · primary <code class="hex">#92400e</code> · theme <code class="hex">#92400e</code> · secondary accent <code class="hex">#047857</code> · WCAG AA target (4.5:1 body text).</p>
   </footer>
 
 </div>

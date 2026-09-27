@@ -97,7 +97,7 @@ export default async function NotificationsPage() {
             <ul className="mt-2 flex flex-col gap-1.5">
               {savedUpdates.map((s) => (
                 <li key={s.resource.id} className="text-sm">
-                  <Link href={`/resources/${s.resource.id}`} className="text-emerald-900 hover:underline">
+                  <Link href={`/resources/${s.resource.id}`} className="text-amber-900 hover:underline">
                     {s.resource.title}
                   </Link>
                 </li>

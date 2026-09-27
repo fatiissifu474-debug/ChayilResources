@@ -129,11 +129,11 @@ export default async function DashboardPage() {
                   <Link
                     key={p.module.id}
                     href={`/learn/${p.module.slug}`}
-                    className="rounded-lg border border-zinc-200 bg-white p-4 hover:border-emerald-700"
+                    className="rounded-lg border border-zinc-200 bg-white p-4 hover:border-amber-700"
                   >
-                    <p className="font-medium text-emerald-900">{p.module.title}</p>
+                    <p className="font-medium text-amber-900">{p.module.title}</p>
                     <div className="mt-2 h-2 rounded-full bg-zinc-100">
-                      <div className="h-2 rounded-full bg-emerald-700" style={{ width: `${pct}%` }} />
+                      <div className="h-2 rounded-full bg-amber-700" style={{ width: `${pct}%` }} />
                     </div>
                     <p className="mt-1 text-xs text-zinc-500">
                       {p.completed ? "Completed ✓" : `${pct}% complete`}

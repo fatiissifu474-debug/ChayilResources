@@ -47,7 +47,7 @@ export default async function AdminPage() {
           <p className="mt-2 text-zinc-600">
             Content administration is limited to reviewers and admins.
           </p>
-          <Link href="/dashboard" className="mt-4 inline-block text-emerald-700 underline">
+          <Link href="/dashboard" className="mt-4 inline-block text-amber-700 underline">
             Back to dashboard
           </Link>
         </main>
@@ -157,7 +157,7 @@ export default async function AdminPage() {
           <div className="mt-3 flex flex-col gap-2">
             {decided.map((r) => (
               <div key={r.id} className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm">
-                <Link href={`/resources/${r.id}`} className="font-medium text-emerald-900 hover:underline">
+                <Link href={`/resources/${r.id}`} className="font-medium text-amber-900 hover:underline">
                   {r.title}
                 </Link>{" "}
                 <span className="text-zinc-500">— {r.reviewStatus}</span>
