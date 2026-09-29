@@ -29,7 +29,7 @@ export default async function NotificationsPage() {
     create: { userId: viewer.id },
   });
 
-  const [newInSubjects, savedUpdates] = await Promise.all([
+  const [newInSubjects, savedUpdates, announcements] = await Promise.all([
     levels.length > 0 && prefs.newInSubjects
       ? db.resource.findMany({
           where: { reviewStatus: "APPROVED", createdAt: { gte: since }, level: { in: levels } },
@@ -46,6 +46,10 @@ export default async function NotificationsPage() {
           include: { resource: { include: { subject: true, classLevel: true } } },
         })
       : Promise.resolve([]),
+    db.announcement.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
   ]);
 
   return (
@@ -103,6 +107,24 @@ export default async function NotificationsPage() {
                 </li>
               ))}
             </ul>
+          )}
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Announcements</h2>
+          {!prefs.announcements ? (
+            <p className="mt-2 text-sm text-zinc-500">Muted — enable it below to see these.</p>
+          ) : announcements.length === 0 ? (
+            <p className="mt-2 text-sm text-zinc-500">No announcements right now.</p>
+          ) : (
+            <div className="mt-3 flex flex-col gap-3">
+              {announcements.map((a) => (
+                <article key={a.id} className="rounded-lg border border-zinc-200 bg-white p-4">
+                  <h3 className="font-medium text-zinc-900">{a.title}</h3>
+                  <p className="mt-1 whitespace-pre-line text-sm text-zinc-700">{a.body}</p>
+                </article>
+              ))}
+            </div>
           )}
         </section>
 

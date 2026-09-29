@@ -14,6 +14,7 @@ const profileSelect = {
   subjects: true,
   school: true,
   organization: true,
+  country: true,
 } as const;
 
 async function requireUserId(): Promise<string | null> {
@@ -42,6 +43,7 @@ export async function PATCH(req: Request) {
     school?: unknown;
     organization?: unknown;
     publisher?: unknown;
+    country?: unknown;
   };
 
   const levels = Array.isArray(body.teachingLevels)
@@ -65,6 +67,13 @@ export async function PATCH(req: Request) {
         ? body.organization.trim().slice(0, 120)
         : null
       : undefined;
+  // Education-system scope (Phase 3 expansion starter). Same preserve-if-absent rule.
+  const country =
+    "country" in body
+      ? typeof body.country === "string" && body.country.trim().length > 0
+        ? body.country.trim().slice(0, 80)
+        : null
+      : undefined;
 
   // One-way self-upgrade: TEACHER → PUBLISHER at signup. Publishers gain the
   // portal + attribution, but every submission is still reviewed. Downgrades
@@ -80,6 +89,7 @@ export async function PATCH(req: Request) {
       subjects,
       school,
       ...(organization !== undefined ? { organization } : {}),
+      ...(country !== undefined ? { country } : {}),
       ...(upgradeToPublisher ? { role: upgradeToPublisher } : {}),
       profileCompleted: true,
     },

@@ -99,6 +99,10 @@ model User {
   moduleProgress   ModuleProgress[]
   discussionPosts  DiscussionPost[]
   discussionReplies DiscussionReply[]
+  packSuggestions  PackSuggestion[]
+  pathsCreated     LearningPath[] @relation("PathCreator")
+  announcementsCreated Announcement[] @relation("AnnouncementCreator")
+  country          String?      // education system scope (Phase 3 expansion starter)
   notificationPreference NotificationPreference?
   entitlements     Entitlement[]
   grantedEntitlements Entitlement[] @relation("GrantedEntitlements")
@@ -255,6 +259,7 @@ model Resource {
   savedBy          SavedResource[]
   collectionItems  CollectionItem[]
   packItems        PackItem[]
+  packSuggestions  PackSuggestion[]
   viewLogs         ViewLog[]
   downloadLogs     DownloadLog[]
   submittedById    String?       // teacher/contributor who submitted (null = staff-created)
@@ -296,6 +301,7 @@ model Pack {
   createdById  String
   createdBy    User          @relation("PackCreator", fields: [createdById], references: [id], onDelete: Cascade)
   items        PackItem[]
+  suggestions  PackSuggestion[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
@@ -403,6 +409,7 @@ model Module {
   createdById    String
   createdBy      User           @relation("ModuleCreator", fields: [createdById], references: [id], onDelete: Cascade)
   steps          ModuleStep[]
+  pathItems      LearningPathItem[]
   progress       ModuleProgress[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
@@ -471,6 +478,79 @@ model DiscussionReply {
 
   @@index([postId, createdAt])
   @@map("discussion_reply")
+}
+
+// ---------- Collaborative creation (Phase 3) ----------
+// Teachers suggest library resources for lesson packs; staff approve and the
+// resource joins the pack. Suggestions are tracked per teacher.
+
+enum SuggestionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model PackSuggestion {
+  id         String           @id @default(cuid())
+  packId     String
+  pack       Pack             @relation(fields: [packId], references: [id], onDelete: Cascade)
+  resourceId String
+  resource   Resource         @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status     SuggestionStatus @default(PENDING)
+  createdAt  DateTime         @default(now())
+
+  @@unique([packId, resourceId, userId])
+  @@index([packId, status])
+  @@map("pack_suggestion")
+}
+
+// ---------- Learning paths: advanced CPD (Phase 3, PRD §22) ----------
+// Ordered module sequences (e.g. "Formative Assessment Pathway"). Progress is
+// derived from per-module completion — no extra progress table needed.
+
+model LearningPath {
+  id          String            @id @default(cuid())
+  slug        String            @unique
+  title       String
+  description String
+  reviewStatus ReviewStatus     @default(DRAFT)
+  createdById String
+  createdBy   User              @relation("PathCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  items       LearningPathItem[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([reviewStatus])
+  @@map("learning_path")
+}
+
+model LearningPathItem {
+  id       String       @id @default(cuid())
+  pathId   String
+  path     LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  moduleId String
+  module   Module       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  position Int
+
+  @@unique([pathId, moduleId])
+  @@index([pathId, position])
+  @@map("learning_path_item")
+}
+
+// ---------- Announcements (completes PRD §23 preferences) ----------
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  createdById String
+  createdBy   User     @relation("AnnouncementCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("announcement")
 }
 
 // ---------- Teacher engagement ----------

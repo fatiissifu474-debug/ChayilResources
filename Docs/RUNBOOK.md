@@ -92,6 +92,12 @@ Restore: `psql -U chayil -h localhost -d chayil_resources -f backup.sql`
 - Community: `/community` (post → reply → report); `/admin` moderation (hide/unhide/delete).
 - Analytics: `/admin/analytics` (KPIs, top searches/views, signups, flags).
   Institution activity: `/admin/institutions/[id]` (member saved/download/submission counts).
+- Collaboration: resource pages offer "Suggest for pack" → `/admin` pack suggestions → approve joins the pack.
+- Learning pathways: `/admin` creates paths from approved modules → `/learn` lists them with
+  progress → `/learn/paths/[slug]` shows per-module completion.
+- Announcements: `/admin` posts → `/notifications` honors the announcements preference.
+- Expansion starter: `country` on profiles (onboarding + PATCH); full curriculum
+  versioning per country remains a content program, not a code task.
 - Password reset: `/reset-password` — `src/lib/email.ts` sends via Resend when
   `RESEND_API_KEY` (+ optional `EMAIL_FROM`) is set, else logs to the server console.
   Pilot: create a free Resend account, verify a domain, set the two vars, restart.

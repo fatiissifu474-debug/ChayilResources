@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { ResourceCard } from "@/components/ResourceCard";
 import { SaveButton } from "@/components/SaveButton";
 import { CollectionAdder } from "@/components/CollectionAdder";
+import { PackSuggester } from "@/components/PackSuggester";
 import { AdminFileUpload } from "@/components/AdminFileUpload";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
 
@@ -142,6 +143,11 @@ export default async function ResourcePage({
 
         <div className="mt-4">
           <CollectionAdder resourceId={id} authed={!!viewer} />
+          <div className="mt-2 rounded-lg border border-zinc-200 bg-white p-4">
+            <h3 className="text-sm font-semibold text-zinc-900">Suggest for a lesson pack</h3>
+            <p className="mt-1 text-sm text-zinc-500">Help packs grow — reviewers decide.</p>
+            <PackSuggester resourceId={id} authed={!!viewer} />
+          </div>
         </div>
 
         {staff && (

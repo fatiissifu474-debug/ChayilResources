@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0] - 2026-09-29
+
+### Added
+- Collaborative creation: suggest resources for packs, staff review, approved joins pack
+- Learning pathways: ordered module sequences with progress, `/learn` shelf + detail
+- Announcements completing notification preferences (post, honor mute, restore)
+- Country scope on profiles (expansion starter)
+- Runbook: collaboration, pathways, announcements, country notes
+
 ## [0.6.0] - 2026-09-29
 
 ### Added

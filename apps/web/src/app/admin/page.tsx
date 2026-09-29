@@ -9,6 +9,7 @@ import { AdminPackForm, AdminPackQueue } from "@/components/AdminPackForm";
 import { AdminAccessManager } from "@/components/AdminAccessManager";
 import { AdminModuleForm, AdminModuleQueue } from "@/components/AdminLearning";
 import { AdminCommunity } from "@/components/AdminCommunity";
+import { AdminSuggestions, AdminPathForm, AdminPathQueue, AdminAnnouncementForm } from "@/components/AdminPhase3";
 
 function toQueueItem(r: {
   id: string;
@@ -56,7 +57,7 @@ export default async function AdminPage() {
     );
   }
 
-  const [pending, decided, draftPacks, institutions, entitlements, draftModules, flaggedPosts] = await Promise.all([
+  const [pending, decided, draftPacks, institutions, entitlements, draftModules, flaggedPosts, pendingSuggestions, approvedModules, draftPaths] = await Promise.all([
     db.resource.findMany({
       where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
       orderBy: { createdAt: "desc" },
@@ -94,6 +95,26 @@ export default async function AdminPage() {
       orderBy: { createdAt: "desc" },
       take: 20,
       include: { author: { select: { name: true } } },
+    }),
+    db.packSuggestion.findMany({
+      where: { status: "PENDING" },
+      orderBy: { createdAt: "desc" },
+      include: {
+        pack: { select: { title: true } },
+        resource: { select: { title: true } },
+        user: { select: { name: true } },
+      },
+    }),
+    db.module.findMany({
+      where: { reviewStatus: "APPROVED" },
+      orderBy: { createdAt: "desc" },
+      take: 30,
+      select: { id: true, title: true },
+    }),
+    db.learningPath.findMany({
+      where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, title: true },
     }),
   ]);
 
@@ -173,6 +194,30 @@ export default async function AdminPage() {
               flagged: p.flagged,
             }))}
           />
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Pack suggestions ({pendingSuggestions.length})</h2>
+          <AdminSuggestions
+            initial={pendingSuggestions.map((s) => ({
+              id: s.id,
+              packTitle: s.pack.title,
+              resourceTitle: s.resource.title,
+              teacher: s.user.name,
+            }))}
+          />
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Learning pathways (create + review)</h2>
+          <AdminPathForm modules={approvedModules} />
+          <h3 className="mt-4 text-sm font-semibold text-zinc-900">Draft paths ({draftPaths.length})</h3>
+          <AdminPathQueue paths={draftPaths} />
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Announcements</h2>
+          <AdminAnnouncementForm />
         </section>
 
         <section className="mt-8">

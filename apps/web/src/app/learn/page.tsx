@@ -18,6 +18,26 @@ export default async function LearnPage() {
     },
   });
 
+  const paths = await db.learningPath.findMany({
+    where: { reviewStatus: "APPROVED" },
+    orderBy: { createdAt: "desc" },
+    include: {
+      items: {
+        orderBy: { position: "asc" },
+        include: {
+          module: {
+            select: {
+              id: true,
+              ...(viewer
+                ? { progress: { where: { userId: viewer.id }, select: { completed: true } } }
+                : {}),
+            },
+          },
+        },
+      },
+    },
+  });
+
   return (
     <>
       <SiteHeader />
@@ -26,6 +46,41 @@ export default async function LearnPage() {
         <p className="mt-1 text-sm text-zinc-600">
           Short training modules — classroom practice guides, teaching tips and readings.
         </p>
+
+        {paths.length > 0 && (
+          <section className="mt-8">
+            <h2 className="font-semibold text-zinc-900">Learning pathways</h2>
+            <p className="mt-1 text-sm text-zinc-600">Ordered module sequences for deeper growth.</p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {paths.map((path) => {
+                const total = path.items.length;
+                const done = path.items.filter((i) =>
+                  "progress" in i.module ? i.module.progress.some((p) => p.completed) : false,
+                ).length;
+                const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+                return (
+                  <Link
+                    key={path.id}
+                    href={`/learn/paths/${path.slug}`}
+                    className="rounded-lg border border-zinc-200 bg-white p-5 hover:border-amber-700"
+                  >
+                    <h3 className="font-semibold text-amber-900">{path.title}</h3>
+                    <p className="mt-1 text-sm text-zinc-600">{total} modules</p>
+                    <p className="mt-2 line-clamp-2 text-sm text-zinc-600">{path.description}</p>
+                    {viewer && total > 0 && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <div className="h-2 w-full rounded-full bg-zinc-100">
+                          <div className="h-2 rounded-full bg-amber-700" style={{ width: `${pct}%` }} />
+                        </div>
+                        <span className="text-xs text-zinc-500">{done === total ? "Done ✓" : `${pct}%`}</span>
+                      </div>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
         {modules.length === 0 ? (
           <p className="mt-4 text-sm text-zinc-500">No modules published yet — check back soon.</p>
         ) : (

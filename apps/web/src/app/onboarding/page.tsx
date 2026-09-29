@@ -35,6 +35,7 @@ export default function OnboardingPage() {
   const [classIds, setClassIds] = useState<string[]>([]);
   const [subjectNames, setSubjectNames] = useState<string[]>([]);
   const [school, setSchool] = useState("");
+  const [country, setCountry] = useState("Ghana");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,6 +63,7 @@ export default function OnboardingPage() {
         setLevels(profile.teachingLevels ?? []);
         setSubjectNames(profile.subjects ?? []);
         setSchool(profile.school ?? "");
+        if (profile.country) setCountry(profile.country);
       }
       setLoading(false);
     }
@@ -74,7 +76,7 @@ export default function OnboardingPage() {
     const res = await fetch("/api/profile", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ teachingLevels: levels, subjects: subjectNames, school }),
+      body: JSON.stringify({ teachingLevels: levels, subjects: subjectNames, school, country }),
     });
     setSaving(false);
     if (!res.ok) {
@@ -166,6 +168,16 @@ export default function OnboardingPage() {
           value={school}
           onChange={(e) => setSchool(e.target.value)}
           placeholder="e.g. Sunrise Basic School"
+          className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2"
+        />
+      </section>
+
+      <section className="mt-6">
+        <h2 className="font-semibold text-zinc-900">5. Country</h2>
+        <input
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          placeholder="e.g. Ghana"
           className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2"
         />
       </section>
