@@ -97,6 +97,8 @@ model User {
   organization     String?      // publisher / partner organization (PRD §17)
   modulesCreated   Module[]     @relation("ModuleCreator")
   moduleProgress   ModuleProgress[]
+  discussionPosts  DiscussionPost[]
+  discussionReplies DiscussionReply[]
   notificationPreference NotificationPreference?
   entitlements     Entitlement[]
   grantedEntitlements Entitlement[] @relation("GrantedEntitlements")
@@ -434,6 +436,41 @@ model ModuleProgress {
 
   @@unique([userId, moduleId])
   @@map("module_progress")
+}
+
+// ---------- Teacher community (Phase 3, PRD §24) ----------
+// Moderated, professional discussion: teaching ideas, classroom challenges,
+// resource recommendations. Staff can hide/unhide/delete; teachers can report.
+
+model DiscussionPost {
+  id        String            @id @default(cuid())
+  authorId  String
+  author    User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  tag       String?           // e.g. subject or topic label
+  hidden    Boolean           @default(false)
+  flagged   Boolean           @default(false)
+  replies   DiscussionReply[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@index([createdAt])
+  @@map("discussion_post")
+}
+
+model DiscussionReply {
+  id        String         @id @default(cuid())
+  postId    String
+  post      DiscussionPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  body      String
+  hidden    Boolean        @default(false)
+  createdAt DateTime       @default(now())
+
+  @@index([postId, createdAt])
+  @@map("discussion_reply")
 }
 
 // ---------- Teacher engagement ----------

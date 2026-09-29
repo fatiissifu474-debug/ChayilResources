@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2026-09-29
+
+### Added
+- Phase 3 starter: moderated teacher community (posts, replies, reports, hide/unhide/delete)
+- Analytics dashboard for education organizations (KPIs, top searches/views, signups, flags)
+- Institution activity detail (per-member saved/downloads/submissions)
+- Runbook: community, analytics and institution notes
+
 ## [0.5.0] - 2026-09-26
 
 ### Added

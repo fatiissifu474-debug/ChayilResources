@@ -89,6 +89,9 @@ Restore: `psql -U chayil -h localhost -d chayil_resources -f backup.sql`
 - Professional learning: `/admin` creates modules with ordered steps → approve → `/learn`;
   teachers mark steps done; dashboard shows My learning. Recommendations are scored
   (subjects, saves, views, searches) with reasons shown on the dashboard.
+- Community: `/community` (post → reply → report); `/admin` moderation (hide/unhide/delete).
+- Analytics: `/admin/analytics` (KPIs, top searches/views, signups, flags).
+  Institution activity: `/admin/institutions/[id]` (member saved/download/submission counts).
 - Password reset: `/reset-password` — `src/lib/email.ts` sends via Resend when
   `RESEND_API_KEY` (+ optional `EMAIL_FROM`) is set, else logs to the server console.
   Pilot: create a free Resend account, verify a domain, set the two vars, restart.

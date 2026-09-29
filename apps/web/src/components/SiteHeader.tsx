@@ -33,6 +33,9 @@ export async function SiteHeader() {
           <Link href="/strategies" className="text-zinc-700 hover:underline">
             Strategies
           </Link>
+          <Link href="/community" className="text-zinc-700 hover:underline">
+            Community
+          </Link>
           <Link href="/learn" className="text-zinc-700 hover:underline">
             Learn
           </Link>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export interface AccessManagerData {
   institutions: Array<{
@@ -128,7 +129,8 @@ export function AdminAccessManager({ initial }: { initial: AccessManagerData }) 
           {initial.institutions.map((inst) => (
             <div key={inst.id} className="rounded border border-zinc-200 p-3">
               <p className="text-sm font-semibold text-zinc-900">
-                {inst.name} <span className="ml-2 rounded bg-zinc-100 px-2 py-0.5 font-mono text-xs">code: {inst.code}</span>
+                <Link href={`/admin/institutions/${inst.id}`} className="hover:underline">{inst.name}</Link>{" "}
+                <span className="ml-2 rounded bg-zinc-100 px-2 py-0.5 font-mono text-xs">code: {inst.code}</span>
               </p>
               <ul className="mt-1 text-sm text-zinc-600">
                 {inst.members.map((m) => (

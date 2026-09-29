@@ -8,6 +8,7 @@ import { AdminCreateForm } from "@/components/AdminCreateForm";
 import { AdminPackForm, AdminPackQueue } from "@/components/AdminPackForm";
 import { AdminAccessManager } from "@/components/AdminAccessManager";
 import { AdminModuleForm, AdminModuleQueue } from "@/components/AdminLearning";
+import { AdminCommunity } from "@/components/AdminCommunity";
 
 function toQueueItem(r: {
   id: string;
@@ -55,7 +56,7 @@ export default async function AdminPage() {
     );
   }
 
-  const [pending, decided, draftPacks, institutions, entitlements, draftModules] = await Promise.all([
+  const [pending, decided, draftPacks, institutions, entitlements, draftModules, flaggedPosts] = await Promise.all([
     db.resource.findMany({
       where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
       orderBy: { createdAt: "desc" },
@@ -88,6 +89,12 @@ export default async function AdminPage() {
       orderBy: { createdAt: "desc" },
       include: { _count: { select: { steps: true } } },
     }),
+    db.discussionPost.findMany({
+      where: { OR: [{ flagged: true }, { hidden: true }] },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+      include: { author: { select: { name: true } } },
+    }),
   ]);
 
   return (
@@ -95,6 +102,9 @@ export default async function AdminPage() {
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-6 py-8">
         <h1 className="text-2xl font-bold text-zinc-900">Content administration</h1>
+        <p className="mt-1 text-sm">
+          <Link href="/admin/analytics" className="text-amber-700 underline">Analytics</Link>
+        </p>
 
         <section className="mt-6">
           <h2 className="font-semibold text-zinc-900">Add a resource (creates a draft)</h2>
@@ -149,6 +159,19 @@ export default async function AdminPage() {
           <h3 className="mt-4 text-sm font-semibold text-zinc-900">Draft modules ({draftModules.length})</h3>
           <AdminModuleQueue
             modules={draftModules.map((m) => ({ id: m.id, title: m.title, stepCount: m._count.steps }))}
+          />
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Community moderation ({flaggedPosts.length})</h2>
+          <AdminCommunity
+            initial={flaggedPosts.map((p) => ({
+              id: p.id,
+              title: p.title,
+              author: p.author.name,
+              hidden: p.hidden,
+              flagged: p.flagged,
+            }))}
           />
         </section>
 
