@@ -9,6 +9,7 @@ interface BrowseParams {
   classId?: string;
   subjectId?: string;
   type?: string;
+  system?: string;
 }
 
 const LEVEL_LABELS: Record<EducationLevel, string> = {
@@ -35,7 +36,7 @@ export default async function BrowsePage({
 }: {
   searchParams: Promise<BrowseParams>;
 }) {
-  const { level, classId, subjectId, type } = await searchParams;
+  const { level, classId, subjectId, type, system } = await searchParams;
   const validLevel =
     level && (Object.values(EducationLevel) as string[]).includes(level)
       ? (level as EducationLevel)
@@ -45,6 +46,16 @@ export default async function BrowsePage({
       ? (type as ResourceType)
       : null;
 
+  // Education-system scope (expansion): explicit ?system= wins, else Ghana, else all.
+  const systems = await db.educationSystem.findMany({
+    where: { active: true },
+    orderBy: { country: "asc" },
+  });
+  const activeSystem = system
+    ? (systems.find((s) => s.id === system) ?? null)
+    : (systems.find((s) => s.country === "Ghana") ?? systems[0] ?? null);
+  const systemFilter = activeSystem ? { systemId: activeSystem.id } : {};
+
   // Step 1: pick a level
   if (!validLevel) {
     return (
@@ -52,11 +63,22 @@ export default async function BrowsePage({
         <SiteHeader />
         <main className="mx-auto max-w-5xl px-6 py-8">
           <h1 className="text-2xl font-bold text-zinc-900">Browse by level</h1>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {systems.map((s) => (
+            <Link
+              key={s.id}
+              href={system && activeSystem?.id === s.id ? "/browse" : `/browse?system=${s.id}`}
+              className={`rounded-full border px-3 py-1.5 text-sm ${activeSystem?.id === s.id && system ? "border-amber-800 bg-amber-50 text-amber-900" : "border-zinc-300 text-zinc-700"}`}
+            >
+              {s.country}
+            </Link>
+          ))}
+        </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {(Object.values(EducationLevel) as EducationLevel[]).map((l) => (
               <Link
                 key={l}
-                href={`/browse?level=${l}`}
+                href={system && activeSystem ? `/browse?level=${l}&system=${activeSystem.id}` : `/browse?level=${l}`}
                 className="rounded-lg border border-zinc-200 bg-white p-6 text-lg font-semibold text-amber-900 hover:border-amber-700"
               >
                 {LEVEL_LABELS[l]}
@@ -70,7 +92,7 @@ export default async function BrowsePage({
 
   const [classes, selectedClass, selectedSubject] = await Promise.all([
     db.classLevel.findMany({
-      where: { level: validLevel },
+      where: { level: validLevel, ...systemFilter },
       orderBy: { position: "asc" },
     }),
     classId
@@ -83,11 +105,11 @@ export default async function BrowsePage({
 
   const subjects = selectedClass
     ? await db.subject.findMany({
-        where: { level: validLevel, classLevels: { some: { id: selectedClass.id } } },
+        where: { level: validLevel, ...systemFilter, classLevels: { some: { id: selectedClass.id } } },
         orderBy: { name: "asc" },
       })
     : await db.subject.findMany({
-        where: { level: validLevel },
+        where: { level: validLevel, ...systemFilter },
         orderBy: { name: "asc" },
       });
 
@@ -106,7 +128,7 @@ export default async function BrowsePage({
       : [];
 
   const qs = (extra: Record<string, string>) =>
-    `/browse?level=${validLevel}` +
+    `/browse?level=${validLevel}${activeSystem ? `&system=${activeSystem.id}` : ""}` +
     Object.entries(extra)
       .map(([k, v]) => `&${k}=${v}`)
       .join("");

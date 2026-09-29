@@ -6,6 +6,12 @@ import { db as prisma } from "../src/lib/db";
  * Level -> ClassLevel -> Subject -> Strand -> SubStrand -> Topic -> Resource
  */
 async function main() {
+  const ghana = await prisma.educationSystem.upsert({
+    where: { country: "Ghana" },
+    update: {},
+    create: { id: "sys_ghana", country: "Ghana", name: "Ghana NaCCA" },
+  });
+
   const classNames: Array<{ level: EducationLevel; name: string; position: number }> = [
     ...[1, 2, 3, 4, 5, 6].map((n) => ({
       level: EducationLevel.PRIMARY as EducationLevel,
@@ -31,22 +37,23 @@ async function main() {
 
   for (const c of classNames) {
     await prisma.classLevel.upsert({
-      where: { level_name: { level: c.level, name: c.name } },
+      where: { systemId_level_name: { systemId: ghana.id, level: c.level, name: c.name } },
       update: {},
-      create: c,
+      create: { ...c, systemId: ghana.id },
     });
   }
 
   const jhs2 = await prisma.classLevel.findFirstOrThrow({
-    where: { level: EducationLevel.JHS, name: "JHS 2" },
+    where: { level: EducationLevel.JHS, name: "JHS 2", systemId: ghana.id },
   });
 
   const english = await prisma.subject.upsert({
-    where: { level_name: { level: EducationLevel.JHS, name: "English Language" } },
+    where: { systemId_level_name: { systemId: ghana.id, level: EducationLevel.JHS, name: "English Language" } },
     update: {},
     create: {
       name: "English Language",
       level: EducationLevel.JHS,
+      systemId: ghana.id,
       classLevels: { connect: [{ id: jhs2.id }] },
     },
   });

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer, isStaff } from "@/lib/require-user";
+import { logStaffAction } from "@/lib/audit";
 import { EntitlementKind } from "@prisma/client";
 
 /**
@@ -48,5 +49,6 @@ export async function POST(req: Request) {
       grantedById: viewer.id,
     },
   });
+  await logStaffAction(viewer.id, "entitlement.grant", "entitlement", entitlement.id, `${body.kind} → ${user.id}`);
   return NextResponse.json({ entitlement }, { status: 201 });
 }

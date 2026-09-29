@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer, isStaff } from "@/lib/require-user";
+import { logStaffAction } from "@/lib/audit";
 
 /** Staff: list announcements / post one (surfaced on /notifications per prefs). */
 export async function GET() {
@@ -35,5 +36,6 @@ export async function POST(req: Request) {
     },
     select: { id: true },
   });
+  await logStaffAction(viewer.id, "announcement.post", "announcement", announcement.id, title);
   return NextResponse.json({ announcement }, { status: 201 });
 }

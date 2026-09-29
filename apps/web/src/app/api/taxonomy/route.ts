@@ -13,7 +13,11 @@ export async function GET(req: Request) {
     .filter((l): l is EducationLevel =>
       (ALL_LEVELS as string[]).includes(l),
     );
-  const where = requested.length > 0 ? { level: { in: requested } } : {};
+  const systemId = searchParams.get("system")?.trim() || null;
+  const where = {
+    ...(requested.length > 0 ? { level: { in: requested } } : {}),
+    ...(systemId ? { systemId } : {}),
+  };
 
   const [classes, subjects] = await Promise.all([
     db.classLevel.findMany({

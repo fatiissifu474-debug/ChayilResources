@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer, isStaff } from "@/lib/require-user";
+import { logStaffAction } from "@/lib/audit";
 
 interface Params {
   params: Promise<{ id: string }>;
@@ -45,5 +46,6 @@ export async function POST(req: Request, { params }: Params) {
     data: { status: body.decision === "approve" ? "APPROVED" : "REJECTED" },
     select: { id: true, status: true },
   });
+  await logStaffAction(viewer.id, `suggestion.${body.decision}`, "suggestion", id);
   return NextResponse.json({ suggestion: updated });
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
 import { db } from "@/lib/db";
 import { getViewer, isStaff } from "@/lib/require-user";
+import { logStaffAction } from "@/lib/audit";
 
 function makeCode(): string {
   return randomBytes(3).toString("hex").toUpperCase();
@@ -36,5 +37,6 @@ export async function POST(req: Request) {
   const institution = await db.institution.create({
     data: { name: name.slice(0, 120), code: makeCode(), createdById: viewer.id },
   });
+  await logStaffAction(viewer.id, "institution.create", "institution", institution.id, institution.name);
   return NextResponse.json({ institution }, { status: 201 });
 }

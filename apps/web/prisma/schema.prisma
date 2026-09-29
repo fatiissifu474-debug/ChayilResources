@@ -108,6 +108,7 @@ model User {
   grantedEntitlements Entitlement[] @relation("GrantedEntitlements")
   institutionMemberships InstitutionMember[]
   institutionsCreated Institution[] @relation("InstitutionCreator")
+  auditActions     AuditLog[]
   viewLogs         ViewLog[]
   downloadLogs     DownloadLog[]
   searchLogs       SearchLog[]
@@ -172,8 +173,10 @@ model ClassLevel {
   topics    Topic[]
   resources Resource[]
   packs     Pack[]
+  systemId  String?
+  system    EducationSystem? @relation(fields: [systemId], references: [id], onDelete: SetNull)
 
-  @@unique([level, name])
+  @@unique([systemId, level, name])
   @@map("class_level")
 }
 
@@ -187,8 +190,10 @@ model Subject {
   topics     Topic[]
   resources  Resource[]
   packs      Pack[]
+  systemId   String?
+  system     EducationSystem? @relation(fields: [systemId], references: [id], onDelete: SetNull)
 
-  @@unique([level, name])
+  @@unique([systemId, level, name])
   @@map("subject")
 }
 
@@ -551,6 +556,39 @@ model Announcement {
 
   @@index([createdAt])
   @@map("announcement")
+}
+
+// ---------- Staff audit trail (Phase 5 governance) ----------
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  actor      User     @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  action     String   // e.g. resource.approve, entitlement.grant, member.add
+  targetType String   // resource | pack | module | path | suggestion | post | entitlement | institution | member | announcement
+  targetId   String
+  detail     String?
+  createdAt  DateTime @default(now())
+
+  @@index([actorId, createdAt])
+  @@index([targetType, targetId])
+  @@map("audit_log")
+}
+
+// ---------- Education systems (Phase 3 expansion foundation) ----------
+// Taxonomy roots per country/curriculum (e.g. Ghana NaCCA, Nigeria NERDC).
+// Existing rows attach to the default system; browse filters by system.
+
+model EducationSystem {
+  id         String       @id @default(cuid())
+  country    String       @unique
+  name       String       // e.g. "Ghana NaCCA"
+  active     Boolean      @default(true)
+  classLevels ClassLevel[]
+  subjects   Subject[]
+  createdAt  DateTime     @default(now())
+
+  @@map("education_system")
 }
 
 // ---------- Teacher engagement ----------

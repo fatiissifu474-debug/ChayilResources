@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2026-09-29
+
+### Added
+- Staff audit trail across all review/grant/member/announcement actions + admin activity feed
+- Education systems: per-country taxonomy scoping (Ghana + Nigeria skeleton), browse switcher
+- Pilot launch kit (`Docs/PILOT.md`): schools, training, run cadence, go/no-go criteria
+- Runbook: systems, audit and pilot notes
+
 ## [0.7.0] - 2026-09-29
 
 ### Added

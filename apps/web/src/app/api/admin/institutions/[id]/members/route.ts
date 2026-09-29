@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer, isStaff } from "@/lib/require-user";
+import { logStaffAction } from "@/lib/audit";
 
 interface Params {
   params: Promise<{ id: string }>;
@@ -45,6 +46,7 @@ export async function POST(req: Request, { params }: Params) {
     });
   }
 
+  await logStaffAction(viewer.id, "member.add", "member", `${id}:${user.id}`);
   return NextResponse.json({ ok: true }, { status: 201 });
 }
 
@@ -65,5 +67,6 @@ export async function DELETE(req: Request, { params }: Params) {
   await db.entitlement.deleteMany({
     where: { userId: body.userId, kind: "INSTITUTIONAL", institutionId: id },
   });
+  await logStaffAction(viewer.id, "member.remove", "member", `${id}:${body.userId}`);
   return NextResponse.json({ ok: true });
 }

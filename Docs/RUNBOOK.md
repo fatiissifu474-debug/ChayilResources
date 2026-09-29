@@ -98,6 +98,12 @@ Restore: `psql -U chayil -h localhost -d chayil_resources -f backup.sql`
 - Announcements: `/admin` posts → `/notifications` honors the announcements preference.
 - Expansion starter: `country` on profiles (onboarding + PATCH); full curriculum
   versioning per country remains a content program, not a code task.
+- Education systems: `education_system` table (Ghana NaCCA seeded + Nigeria NERDC skeleton);
+  `/browse?system=<id>` scopes taxonomy, `/api/systems` lists. New countries: insert system
+  row + classes/subjects with that `systemId` (uniqueness is per system).
+- Staff audit trail: every approve/reject/grant/member/announce action lands in `audit_log`,
+  visible in `/admin` → Staff activity.
+- Pilot launch: see `Docs/PILOT.md` (schools, training, 4–6 week run, go/no-go).
 - Password reset: `/reset-password` — `src/lib/email.ts` sends via Resend when
   `RESEND_API_KEY` (+ optional `EMAIL_FROM`) is set, else logs to the server console.
   Pilot: create a free Resend account, verify a domain, set the two vars, restart.

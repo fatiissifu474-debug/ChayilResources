@@ -57,7 +57,7 @@ export default async function AdminPage() {
     );
   }
 
-  const [pending, decided, draftPacks, institutions, entitlements, draftModules, flaggedPosts, pendingSuggestions, approvedModules, draftPaths] = await Promise.all([
+  const [pending, decided, draftPacks, institutions, entitlements, draftModules, flaggedPosts, pendingSuggestions, approvedModules, draftPaths, staffActivity] = await Promise.all([
     db.resource.findMany({
       where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
       orderBy: { createdAt: "desc" },
@@ -115,6 +115,11 @@ export default async function AdminPage() {
       where: { reviewStatus: { in: ["DRAFT", "IN_REVIEW"] } },
       orderBy: { createdAt: "desc" },
       select: { id: true, title: true },
+    }),
+    db.auditLog.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 20,
+      include: { actor: { select: { name: true } } },
     }),
   ]);
 
@@ -218,6 +223,19 @@ export default async function AdminPage() {
         <section className="mt-8">
           <h2 className="font-semibold text-zinc-900">Announcements</h2>
           <AdminAnnouncementForm />
+        </section>
+
+        <section className="mt-8">
+          <h2 className="font-semibold text-zinc-900">Staff activity</h2>
+          <ul className="mt-2 flex flex-col gap-1 text-sm text-zinc-600">
+            {staffActivity.map((a) => (
+              <li key={a.id}>
+                {a.actor.name} · <code className="rounded bg-zinc-100 px-1 font-mono text-xs">{a.action}</code>{" "}
+                {a.targetType}:{a.targetId.slice(0, 8)}{a.detail ? ` — ${a.detail}` : ""}
+              </li>
+            ))}
+            {staffActivity.length === 0 && <li>No staff actions logged yet.</li>}
+          </ul>
         </section>
 
         <section className="mt-8">
