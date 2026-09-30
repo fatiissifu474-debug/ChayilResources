@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.0] - 2026-09-29
+
+### Added
+- Expanded library seed: 7 subjects, 8 topics, 15 resources across Primary/JHS/SHS/TVET
+- Fully idempotent seed (safe to rerun; verified with double-run)
+- Production build re-verified with smoke test
+
 ## [0.9.0] - 2026-09-29
 
 ### Added
