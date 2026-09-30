@@ -53,6 +53,9 @@ export async function SiteHeader() {
               <Link href="/contribute" className="text-zinc-700 hover:underline">
                 Contribute
               </Link>
+              <Link href="/assistant" className="text-zinc-700 hover:underline">
+                Assistant
+              </Link>
               <Link href="/publisher" className="text-zinc-700 hover:underline">
                 Publisher
               </Link>

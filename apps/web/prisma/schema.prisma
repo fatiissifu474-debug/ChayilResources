@@ -243,6 +243,7 @@ model Resource {
   description      String
   type             ResourceType
   fileKey          String?       // storage key (null = metadata-only / link pending)
+  aiSummary        String?       // cached Groq-generated summary (nullable = not yet generated)
   fileSize         Int?
   mimeType         String?
   pages            Int?

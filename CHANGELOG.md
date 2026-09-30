@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.0] - 2026-09-29
+
+### Added
+- Groq AI integration (`groq-sdk`, server-side only): smarter search (natural language
+  to filters with understood-as chips + keyword fallback), cached auto-summaries on
+  resource pages, lesson-prep assistant (`/assistant`) with library matches
+- Runbook: Groq setup, model rotation and fallback notes
+
 ## [0.8.0] - 2026-09-29
 
 ### Added

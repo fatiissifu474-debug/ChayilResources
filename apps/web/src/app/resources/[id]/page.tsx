@@ -6,6 +6,7 @@ import { canDownloadResource } from "@/lib/access";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ResourceCard } from "@/components/ResourceCard";
 import { SaveButton } from "@/components/SaveButton";
+import { ResourceSummary } from "@/components/ResourceSummary";
 import { CollectionAdder } from "@/components/CollectionAdder";
 import { PackSuggester } from "@/components/PackSuggester";
 import { AdminFileUpload } from "@/components/AdminFileUpload";
@@ -115,6 +116,8 @@ export default async function ResourcePage({
         </dl>
 
         <p className="mt-4 text-zinc-700">{resource.description}</p>
+
+        <ResourceSummary resourceId={id} initialSummary={resource.aiSummary} authed={!!viewer} />
 
         <div className="mt-6 flex flex-wrap gap-3">
           <SaveButton resourceId={id} initialSaved={!!savedEntry} authed={!!viewer} />

@@ -114,6 +114,10 @@ Restore: `psql -U chayil -h localhost -d chayil_resources -f backup.sql`
   `notification_preference`). Sections render "Muted" when disabled.
 - Storage: disk driver locally; `STORAGE_DRIVER=r2` uses Cloudflare R2. Public buckets
   serve direct URLs, private buckets get 1-hour presigned URLs automatically.
+- Groq AI (`src/lib/ai.ts`): key in `apps/web/.env` as `GROQ_API_KEY` (git-ignored,
+  server-side only). Optional `GROQ_MODEL` override; defaults to `openai/gpt-oss-20b`
+  with `openai/gpt-oss-120b` fallback (model IDs rotate — check console.groq.com/docs/models
+  if calls start 404ing). Smarter search degrades to keywords when AI is unavailable.
 - Live API testing without a browser: `curl.exe` with `-c/-b` cookie jars; JSON bodies
   from files (`-d "@body.json"`) — PowerShell quoting mangles inline JSON.
 
