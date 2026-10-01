@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Self-contained deploy artifact (.next/standalone) for VPS/Docker hosts.
+  output: "standalone",
 };
 
 export default nextConfig;

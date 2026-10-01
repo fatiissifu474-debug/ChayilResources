@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.0] - 2026-10-01
+
+### Added
+- Deploy readiness: `.env.example` template, standalone build output, PWA icons,
+  Terms/Privacy pages (pilot versions), rate limiting on public write endpoints,
+  automated backup script (14-day retention, verified with real dump)
+- Secrets rotated (auth secret + DB password); runbook updated
+
 ## [0.10.0] - 2026-09-29
 
 ### Added

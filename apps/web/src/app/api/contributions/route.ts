@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer } from "@/lib/require-user";
 import { storeUpload } from "@/lib/upload";
+import { rateLimit, clientKey, limitedResponse } from "@/lib/ratelimit";
 import { EducationLevel, ResourceType } from "@prisma/client";
 
 /**
@@ -22,6 +23,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  if (!rateLimit(clientKey(req, "contribute"), 5)) return limitedResponse();
   const viewer = await getViewer();
   if (!viewer) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

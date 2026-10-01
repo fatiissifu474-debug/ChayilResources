@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer } from "@/lib/require-user";
 import { generateLessonPrep } from "@/lib/ai";
+import { rateLimit, clientKey, limitedResponse } from "@/lib/ratelimit";
 
 /**
  * POST /api/assistant/prep { level, classLevelId?, subject, topic } —
  * structured lesson preparation + matching library resources.
  */
 export async function POST(req: Request) {
+  if (!rateLimit(clientKey(req, "assistant"), 5)) return limitedResponse();
   const viewer = await getViewer();
   if (!viewer) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description:
     "Find the right resource for the right class, subject and topic — quickly.",
   manifest: "/manifest.webmanifest",
+  icons: { icon: "/icon-192.png", apple: "/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = {

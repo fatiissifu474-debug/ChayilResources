@@ -133,6 +133,12 @@ export default async function Home() {
             </Link>
           </div>
         </section>
+
+        <footer className="mx-auto max-w-5xl px-6 py-8 text-center text-sm text-zinc-500">
+          <Link href="/terms" className="underline">Terms of use</Link>
+          {" · "}
+          <Link href="/privacy" className="underline">Privacy notice</Link>
+        </footer>
       </main>
     </>
   );

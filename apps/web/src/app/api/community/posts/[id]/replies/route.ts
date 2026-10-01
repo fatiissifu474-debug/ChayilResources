@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer } from "@/lib/require-user";
+import { rateLimit, clientKey, limitedResponse } from "@/lib/ratelimit";
 
 interface Params {
   params: Promise<{ id: string }>;
@@ -9,6 +10,7 @@ interface Params {
 /** POST /api/community/posts/[id]/replies { body } — reply to a visible post. */
 export async function POST(req: Request, { params }: Params) {
   const { id } = await params;
+  if (!rateLimit(clientKey(req, "community-reply"), 10)) return limitedResponse();
   const viewer = await getViewer();
   if (!viewer) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

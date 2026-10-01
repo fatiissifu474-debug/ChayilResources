@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getViewer } from "@/lib/require-user";
+import { rateLimit, clientKey, limitedResponse } from "@/lib/ratelimit";
 import { FeedbackKind } from "@prisma/client";
 
 interface Params {
@@ -10,6 +11,7 @@ interface Params {
 /** POST /api/resources/[id]/feedback — { kind, comment? }. One signal per kind per teacher. */
 export async function POST(req: Request, { params }: Params) {
   const { id } = await params;
+  if (!rateLimit(clientKey(req, "feedback"), 10)) return limitedResponse();
   const viewer = await getViewer();
   if (!viewer) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

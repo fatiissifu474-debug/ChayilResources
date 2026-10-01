@@ -74,6 +74,7 @@ Roles: `TEACHER` (default) → `REVIEWER`/`ADMIN` via SQL file (avoids shell quo
 
 Backup: `pg_dump -U chayil -h localhost chayil_resources > backup.sql`
 Restore: `psql -U chayil -h localhost -d chayil_resources -f backup.sql`
+Automated: run `scripts/backup.ps1` (keeps 14 daily dumps in `%LOCALAPPDATA%\ChayilData\backups`).
 
 ## 5. Test accounts & flows
 
