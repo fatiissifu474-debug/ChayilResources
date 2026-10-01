@@ -8,7 +8,16 @@ and optionally ~$15/year for a custom domain (Step 4 — skippable; free address
 
 ---
 
-## Step 1 — Production database: Neon (free tier)
+## Step 1 — Production database: Neon (free tier) ✅ DONE 2026-10-01
+
+Project `lucky-silence-73060912` linked in this repo (`.neon/`, git-ignored);
+production branch migrated + seeded (1 system, 15 classes, 11 subjects, 37 resources).
+Connection string lives in repo-root `.env.local` (git-ignored, never commit).
+Key commands: `neon deploy` (apply `neon.ts` policy), Prisma with `$env:DATABASE_URL`
+loaded from `.env.local` (see RUNBOOK §4 pattern), `neon mcp` still needs an API key.
+
+Why: your data currently lives only on this laptop. Neon hosts PostgreSQL on the
+internet with backups included.
 
 Why: your data currently lives only on this laptop. Neon hosts PostgreSQL on the
 internet with backups included.
