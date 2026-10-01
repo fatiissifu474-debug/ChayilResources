@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.0] - 2026-10-01
+
+### Added
+- Pilot content wave: 12 subjects, 20 topics, 43 resources across all levels
+- Beginner's deploy guide (`Docs/DEPLOY.md`): Neon, R2, Resend, domain, Vercel, legal
+
 ## [0.11.0] - 2026-10-01
 
 ### Added

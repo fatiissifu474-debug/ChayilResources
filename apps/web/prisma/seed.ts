@@ -216,7 +216,95 @@ async function main() {
     await ensureResource(s);
   }
 
-  console.log(`Seeded: JHS 2 English chain + resource ${lessonPlan.id} (+${samples.length} library samples)`);
+  // --- Pilot content wave (idempotent): breadth across every level ---
+  const batchSubjects = [
+    { name: "English Language", level: EducationLevel.SHS, classes: ["SHS 1", "SHS 2", "SHS 3"] },
+    { name: "Mathematics", level: EducationLevel.SHS, classes: ["SHS 1"] },
+    { name: "Mathematics", level: EducationLevel.PRIMARY, classes: ["Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"] },
+    { name: "Science", level: EducationLevel.PRIMARY, classes: ["Primary 4", "Primary 5", "Primary 6"] },
+    { name: "Social Studies", level: EducationLevel.JHS, classes: ["JHS 1", "JHS 2", "JHS 3"] },
+  ];
+  const subjIds: Record<string, string> = {
+    [`${EducationLevel.JHS}:Mathematics`]: maths.id,
+    [`${EducationLevel.JHS}:Science`]: science.id,
+    [`${EducationLevel.PRIMARY}:English Language`]: engPrimary.id,
+    [`${EducationLevel.SHS}:Biology`]: biology.id,
+    [`${EducationLevel.TVET}:Electrical Installation`]: electrical.id,
+    [`${EducationLevel.JHS}:English Language`]: english.id,
+  };
+  for (const s of batchSubjects) {
+    const r = await ensureSubject(s.name, s.level, s.classes);
+    subjIds[`${s.level}:${s.name}`] = r.id;
+  }
+
+  const batchTopics: Array<{ name: string; subj: string; cls: string; objectives?: string }> = [
+    { name: "Ratios and proportion", subj: "JHS:Mathematics", cls: "JHS 2" },
+    { name: "Integers", subj: "JHS:Mathematics", cls: "JHS 1" },
+    { name: "Forces and motion", subj: "JHS:Science", cls: "JHS 1" },
+    { name: "Summary writing", subj: "JHS:English Language", cls: "JHS 3" },
+    { name: "Phonics basics", subj: "PRIMARY:English Language", cls: "Primary 1" },
+    { name: "Number bonds", subj: "PRIMARY:Mathematics", cls: "Primary 2" },
+    { name: "Living things", subj: "PRIMARY:Science", cls: "Primary 5" },
+    { name: "Comprehension", subj: "SHS:English Language", cls: "SHS 1" },
+    { name: "Quadratic equations", subj: "SHS:Mathematics", cls: "SHS 1" },
+    { name: "Cell structure", subj: "SHS:Biology", cls: "SHS 1" },
+    { name: "Electrical safety", subj: "TVET:Electrical Installation", cls: "TVET Year 1" },
+    { name: "Our nation Ghana", subj: "JHS:Social Studies", cls: "JHS 1" },
+  ];
+  const topicIds: Record<string, string> = {};
+  for (const t of batchTopics) {
+    const r = await ensureTopic(t.name, subjIds[t.subj], { objectives: t.objectives, classLevelId: classByName[t.cls] });
+    topicIds[`${t.subj}:${t.name}`] = r.id;
+  }
+
+  type Res = Parameters<typeof ensureResource>[0];
+  const R = (
+    title: string, description: string, type: ResourceType, level: EducationLevel,
+    cls: string, subj: string, topic?: string,
+  ): Res => ({
+    title, description, type, level,
+    classLevelId: classByName[cls], subjectId: subjIds[subj],
+    ...(topic ? { topicId: topicIds[`${subj}:${topic}`] } : {}),
+  });
+
+  const wave: Res[] = [
+    R("JHS 2 Ratios and Proportion — Lesson Plan", "Concept building with market examples, practice sets and plenary.", ResourceType.LESSON_PLAN, EducationLevel.JHS, "JHS 2", "JHS:Mathematics", "Ratios and proportion"),
+    R("JHS 2 Ratios Practice — Worksheet", "30 graded ratio problems with answer key.", ResourceType.WORKSHEET, EducationLevel.JHS, "JHS 2", "JHS:Mathematics", "Ratios and proportion"),
+    R("JHS 1 Integers — Quiz", "Ordering, adding and subtracting integers; 12 questions.", ResourceType.QUIZ, EducationLevel.JHS, "JHS 1", "JHS:Mathematics", "Integers"),
+    R("JHS 1 Forces and Motion — Worksheet", "Push/pull sorting, friction experiments on paper, key terms.", ResourceType.WORKSHEET, EducationLevel.JHS, "JHS 1", "JHS:Science", "Forces and motion"),
+    R("JHS 1 Forces and Motion — Quiz", "10 questions with diagrams described in words.", ResourceType.QUIZ, EducationLevel.JHS, "JHS 1", "JHS:Science", "Forces and motion"),
+    R("JHS 3 Summary Writing — Teacher Guide", "Step-by-step approach to BECE summary passages with worked example.", ResourceType.TEACHER_GUIDE, EducationLevel.JHS, "JHS 3", "JHS:English Language", "Summary writing"),
+    R("JHS 3 Summary Practice — Worksheet", "Two passages with length-constrained summary tasks.", ResourceType.WORKSHEET, EducationLevel.JHS, "JHS 3", "JHS:English Language", "Summary writing"),
+    R("Primary 1 Phonics Basics — Classroom Activity", "Letter-sound games with locally available materials.", ResourceType.CLASSROOM_ACTIVITY, EducationLevel.PRIMARY, "Primary 1", "PRIMARY:English Language", "Phonics basics"),
+    R("Primary 1 Phonics Wall Chart", "Printable sound chart: single letters and common blends.", ResourceType.POSTER, EducationLevel.PRIMARY, "Primary 1", "PRIMARY:English Language", "Phonics basics"),
+    R("Primary 2 Number Bonds — Worksheet", "Bonds to 10 and 20 with visual ten-frames.", ResourceType.WORKSHEET, EducationLevel.PRIMARY, "Primary 2", "PRIMARY:Mathematics", "Number bonds"),
+    R("Primary 2 Number Bonds — Quiz", "Quick oral and written check for fluency.", ResourceType.QUIZ, EducationLevel.PRIMARY, "Primary 2", "PRIMARY:Mathematics", "Number bonds"),
+    R("Primary 5 Living Things — Reading Material", "Plants, animals and habitats around the school compound.", ResourceType.READING_MATERIAL, EducationLevel.PRIMARY, "Primary 5", "PRIMARY:Science", "Living things"),
+    R("Primary 5 Living Things — Practical Activity", "School-ground observation walk with recording sheet.", ResourceType.PRACTICAL_ACTIVITY, EducationLevel.PRIMARY, "Primary 5", "PRIMARY:Science", "Living things"),
+    R("SHS 1 Comprehension — Exam Preparation", "Two WASSCE-style passages with timed practice and model answers.", ResourceType.EXAM_PREP, EducationLevel.SHS, "SHS 1", "SHS:English Language", "Comprehension"),
+    R("SHS 1 Comprehension Strategies — Teacher Guide", "Skimming, scanning and inference techniques for long passages.", ResourceType.TEACHER_GUIDE, EducationLevel.SHS, "SHS 1", "SHS:English Language", "Comprehension"),
+    R("SHS 1 Quadratic Equations — Lesson Plan", "Factorization and formula methods over two periods.", ResourceType.LESSON_PLAN, EducationLevel.SHS, "SHS 1", "SHS:Mathematics", "Quadratic equations"),
+    R("SHS 1 Quadratics — Revision Material", "Formula sheet, worked examples and past-question drills.", ResourceType.REVISION_MATERIAL, EducationLevel.SHS, "SHS 1", "SHS:Mathematics", "Quadratic equations"),
+    R("SHS 1 Cell Structure — Diagram Pack", "Labelled plant and animal cell diagrams with blank versions for testing.", ResourceType.DIAGRAM, EducationLevel.SHS, "SHS 1", "SHS:Biology", "Cell structure"),
+    R("SHS 1 Cell Structure — Revision Notes", "Organelles, functions and comparison table for exams.", ResourceType.REVISION_MATERIAL, EducationLevel.SHS, "SHS 1", "SHS:Biology", "Cell structure"),
+    R("TVET Electrical Safety — Teacher Guide", "Workshop safety rules, PPE and emergency procedures.", ResourceType.TEACHER_GUIDE, EducationLevel.TVET, "TVET Year 1", "TVET:Electrical Installation", "Electrical safety"),
+    R("TVET Electrical Safety — Assessment", "Safety certification quiz with pass mark and remediation notes.", ResourceType.ASSESSMENT, EducationLevel.TVET, "TVET Year 1", "TVET:Electrical Installation", "Electrical safety"),
+    R("JHS 1 Our Nation Ghana — Reading Material", "Regions, culture and civic values in simple language.", ResourceType.READING_MATERIAL, EducationLevel.JHS, "JHS 1", "JHS:Social Studies", "Our nation Ghana"),
+    R("JHS 1 Our Nation Ghana — Worksheet", "Map labelling and short-answer civic questions.", ResourceType.WORKSHEET, EducationLevel.JHS, "JHS 1", "JHS:Social Studies", "Our nation Ghana"),
+    R("JHS 3 BECE Mathematics Mock", "Full 60-question mock with marking scheme and topic map.", ResourceType.EXAM_PREP, EducationLevel.JHS, "JHS 3", "JHS:Mathematics"),
+    R("SHS 1 Biology Mid-Term Assessment", "Theory + objective sections with marking guide.", ResourceType.ASSESSMENT, EducationLevel.SHS, "SHS 1", "SHS:Biology"),
+    R("Primary 5 Science Reader (Sample)", "Short illustrated passages for class reading corners.", ResourceType.READING_MATERIAL, EducationLevel.PRIMARY, "Primary 5", "PRIMARY:Science"),
+    R("Exit Tickets — Teaching Strategy", "What it is: 2-minute end-of-lesson checks. Why it matters: every learner shows understanding. How to use it: one question on a slip, sort into got-it / wobbly / lost piles. Example: Primary Mathematics — write one number bond to 20.",
+      ResourceType.TEACHING_STRATEGY, EducationLevel.PRIMARY, "Primary 2", "PRIMARY:Mathematics"),
+    R("Cold Calling — Teaching Strategy", "What it is: directed questioning. Why it matters: keeps all learners alert. How to use it: pose, pause, name, respond. Example: SHS Biology — Ama, name one function of the cell membrane.",
+      ResourceType.TEACHING_STRATEGY, EducationLevel.SHS, "SHS 1", "SHS:Biology"),
+  ];
+
+  for (const w of wave) {
+    await ensureResource(w);
+  }
+
+  console.log(`Seeded: JHS 2 English chain + resource ${lessonPlan.id} (+${samples.length + wave.length} library samples)`);
 }
 
 main()
