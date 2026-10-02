@@ -173,6 +173,7 @@ model ClassLevel {
   topics    Topic[]
   resources Resource[]
   packs     Pack[]
+  learnerLessons LearnerLesson[]
   systemId  String?
   system    EducationSystem? @relation(fields: [systemId], references: [id], onDelete: SetNull)
 
@@ -190,6 +191,7 @@ model Subject {
   topics     Topic[]
   resources  Resource[]
   packs      Pack[]
+  learnerLessons LearnerLesson[]
   systemId   String?
   system     EducationSystem? @relation(fields: [systemId], references: [id], onDelete: SetNull)
 
@@ -230,6 +232,7 @@ model Topic {
   classLevelId String?
   classLevel   ClassLevel? @relation(fields: [classLevelId], references: [id], onDelete: SetNull)
   resources    ResourceTopic[]
+  learnerLessons LearnerLesson[]
 
   @@index([subjectId])
   @@map("topic")
@@ -557,6 +560,36 @@ model Announcement {
 
   @@index([createdAt])
   @@map("announcement")
+}
+
+// ---------- Learner Resources (learner-facing lessons, Basic 1-9) ----------
+// Step-by-step learner books with critical-thinking activities and assessments,
+// developed from teacher lesson plans. Files live beside teacher plans in git;
+// metadata + reading text live here.
+
+model LearnerLesson {
+  id           String       @id @default(cuid())
+  title        String
+  description  String
+  basicLevel   Int          // 1-9 (Basic 1-6 = Primary, 7-9 = JHS)
+  classLevelId String?
+  classLevel   ClassLevel?  @relation(fields: [classLevelId], references: [id], onDelete: SetNull)
+  subjectId    String?
+  subject      Subject?     @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  topicId      String?
+  topic        Topic?       @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  sourceRef    String?      // e.g. "Basic 7 Oral Language Lesson 3"
+  bodyText     String       // full reading text for on-screen study
+  fileKey      String?
+  fileSize     Int?
+  mimeType     String?
+  reviewStatus ReviewStatus @default(DRAFT)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([basicLevel, subjectId])
+  @@index([reviewStatus])
+  @@map("learner_lesson")
 }
 
 // ---------- Staff audit trail (Phase 5 governance) ----------

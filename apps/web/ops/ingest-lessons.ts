@@ -4,7 +4,7 @@ import mammoth from "mammoth";
 import { EducationLevel, ResourceType, ReviewStatus } from "@prisma/client";
 import { db } from "../src/lib/db";
 
-const REPO = path.resolve(__dirname, "../..");
+const REPO = path.resolve(__dirname, "../../..");
 const STORAGE = path.resolve(process.env.STORAGE_DIR ?? "./storage");
 const MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 

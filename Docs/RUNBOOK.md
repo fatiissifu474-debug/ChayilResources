@@ -104,6 +104,12 @@ Automated: run `scripts/backup.ps1` (keeps 14 daily dumps in `%LOCALAPPDATA%\Cha
   `npx tsx ops/ingest-lessons.ts` from `apps/web` (copies files to storage, extracts
   descriptions, idempotent by title). Production gets structure + metadata; files
   attach at hosting time from the same repo sources.
+- Learner Resources: contributor books go in `Basic N Learner Resource/` and are ingested
+  with `npx tsx ops/ingest-learner-user.ts`. Generated books: `ops/generate-learner.ts`
+  drafts units from teacher plans via Groq (13-section arc matching the contributor
+  originals) → `ops/render-learner.ts` builds styled `.docx` (Calibri, blue headings,
+  callout tables, header/footer) → `ops/ingest-learner-gen.ts` attaches them.
+  `LearnerLesson` rows serve `/learners` (Basic 1–9) with step-by-step reading + download.
 - Expansion starter: `country` on profiles (onboarding + PATCH); full curriculum
   versioning per country remains a content program, not a code task.
 - Education systems: `education_system` table (Ghana NaCCA). Product scope is basic

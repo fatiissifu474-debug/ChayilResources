@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.15.0] - 2026-10-02
+
+### Added
+- Learner Resources section (`/learners` by Basic level, step-by-step reading, download)
+- Ingested 2 contributor learner books as real rows with files
+- Generated 27 matching learner books from teacher plans (Groq content, contributor styling)
+- Reusable ops pipeline: generate → render (.docx) → ingest; runbook documented
+
 ## [0.14.0] - 2026-10-01
 
 ### Added
