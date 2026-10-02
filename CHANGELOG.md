@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.16.0] - 2026-10-02
+
+### Added
+- Docker support: multi-stage `Dockerfile` (standalone), `docker-compose.yml`
+  (Postgres 16 + app + healthchecks + volumes), `.env.docker.example`
+- Beginner migration guide (`Docs/MOVE-TO-DOCKER.md`): installs, clone, secrets,
+  compose, migrate/seed/ingest, admin promotion, daily use, troubleshooting
+
 ## [0.15.1] - 2026-10-02
 
 ### Removed

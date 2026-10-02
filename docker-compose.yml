@@ -1,0 +1,45 @@
+# ChayilResources — local production-like stack (Postgres + app).
+# Usage: copy .env.docker.example to .env, fill secrets, then `docker compose up -d --build`.
+# Migrations + seed run from the host (see Docs/MOVE-TO-DOCKER.md) — DATABASE_URL below
+# uses localhost because host tools reach Postgres through the published port.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: chayil
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in your .env file}
+      POSTGRES_DB: chayil_resources
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chayil"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: ./apps/web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://chayil:${DB_PASSWORD:?Set DB_PASSWORD in your .env file}@db:5432/chayil_resources
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?Set BETTER_AUTH_SECRET in your .env file}
+      BETTER_AUTH_URL: http://localhost:3000
+      STORAGE_DRIVER: disk
+      STORAGE_DIR: ./storage
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      PASSWORD_RESET_DEV_LOG: "true"
+    volumes:
+      - uploads:/app/storage
+
+volumes:
+  pgdata:
+  uploads:
