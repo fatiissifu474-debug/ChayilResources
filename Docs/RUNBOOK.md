@@ -97,6 +97,13 @@ Automated: run `scripts/backup.ps1` (keeps 14 daily dumps in `%LOCALAPPDATA%\Cha
 - Learning pathways: `/admin` creates paths from approved modules → `/learn` lists them with
   progress → `/learn/paths/[slug]` shows per-module completion.
 - Announcements: `/admin` posts → `/notifications` honors the announcements preference.
+- Curriculum structure: `prisma/seed.ts` builds Ghana classes, the 14 subjects,
+  English strands and Oral Language topics (idempotent). Real lesson files live in
+  the repo's `Basic N Oral Language` folders and are ingested with:
+  `npx tsx ops/structure.ts` (subjects/strands, needs `DATABASE_URL`) then
+  `npx tsx ops/ingest-lessons.ts` from `apps/web` (copies files to storage, extracts
+  descriptions, idempotent by title). Production gets structure + metadata; files
+  attach at hosting time from the same repo sources.
 - Expansion starter: `country` on profiles (onboarding + PATCH); full curriculum
   versioning per country remains a content program, not a code task.
 - Education systems: `education_system` table (Ghana NaCCA). Product scope is basic

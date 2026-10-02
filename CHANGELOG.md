@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.14.0] - 2026-10-01
+
+### Added
+- Final subject structure: 7 Primary + 7 JHS subjects (Maths naming), English strands
+  (Oral Language, Reading, Grammar, Writing/Composition, Literature) for both levels
+- Ingested 29 real Oral Language lesson plans (Basic 7–9) with files + extracted
+  descriptions; reusable ops scripts (`ops/structure.ts`, `ops/ingest-lessons.ts`)
+
+### Removed
+- All placeholder topics, resources and test packs (local + production)
+
 ## [0.13.0] - 2026-10-01
 
 ### Changed (scope narrowing)
