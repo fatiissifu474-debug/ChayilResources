@@ -17,10 +17,8 @@ interface Subject {
 }
 
 const LEVELS = [
-  { value: "PRIMARY", label: "Primary" },
-  { value: "JHS", label: "JHS" },
-  { value: "SHS", label: "SHS" },
-  { value: "TVET", label: "TVET" },
+  { value: "PRIMARY", label: "Primary (Basic 1–6)" },
+  { value: "JHS", label: "JHS (Basic 7–9)" },
 ];
 
 function toggle(list: string[], value: string): string[] {

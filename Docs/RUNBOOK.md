@@ -99,7 +99,9 @@ Automated: run `scripts/backup.ps1` (keeps 14 daily dumps in `%LOCALAPPDATA%\Cha
 - Announcements: `/admin` posts → `/notifications` honors the announcements preference.
 - Expansion starter: `country` on profiles (onboarding + PATCH); full curriculum
   versioning per country remains a content program, not a code task.
-- Education systems: `education_system` table (Ghana NaCCA seeded + Nigeria NERDC skeleton);
+- Education systems: `education_system` table (Ghana NaCCA). Product scope is basic
+  school only (Primary + JHS, Basic 1–9, Ghana); SHS/TVET and other systems were removed
+  from data and UI. The `EducationLevel` enum still lists them for a future return.
   `/browse?system=<id>` scopes taxonomy, `/api/systems` lists. New countries: insert system
   row + classes/subjects with that `systemId` (uniqueness is per system).
 - Staff audit trail: every approve/reject/grant/member/announce action lands in `audit_log`,

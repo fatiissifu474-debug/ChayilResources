@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.13.0] - 2026-10-01
+
+### Changed (scope narrowing)
+- Product limited to basic school (Primary + JHS, Basic 1–9) and Ghana only
+- Removed SHS/TVET taxonomy, resources and UI entry points; removed Nigeria system
+- Seed grows Primary/JHS content only; enum retains SHS/TVET for a future return
+- PRD §40 design log records the binding scope
+
 ## [0.12.0] - 2026-10-01
 
 ### Added

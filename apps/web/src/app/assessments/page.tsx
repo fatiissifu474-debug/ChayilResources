@@ -13,6 +13,9 @@ const LEVEL_LABELS: Record<EducationLevel, string> = {
   TVET: "TVET",
 };
 
+// Product scope: basic school only (Primary + JHS, i.e. Basic 1–9).
+const ACTIVE_LEVELS: EducationLevel[] = ["PRIMARY", "JHS"];
+
 /** Assessment Resource Centre (PRD §19): quizzes, class exercises and exam prep by class. */
 export default async function AssessmentsPage({
   searchParams,
@@ -35,7 +38,7 @@ export default async function AssessmentsPage({
             Class exercises, quizzes, revision and exam-style questions — choose a level.
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {(Object.values(EducationLevel) as EducationLevel[]).map((l) => (
+            {ACTIVE_LEVELS.map((l) => (
               <Link
                 key={l}
                 href={`/assessments?level=${l}`}

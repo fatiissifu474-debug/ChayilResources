@@ -961,3 +961,9 @@ Unlike a conventional digital library, it organizes resources around the **teach
 **Rationale:** gold gives ChayilResources ("chayil" — excellence/strength) a distinctive, warm identity; emerald steps back to a secondary role. REVIEWED (green), CURRICULUM-ALIGNED (blue) and CONTRIBUTOR (purple) badge semantics are unchanged. Gold-on-white pairings (`#92400e` on `#ffffff` ≈ 7:1) keep the WCAG AA 4.5:1 target.
 
 **Scope of this change:** `design.html` preview updated (variables, swatches, buttons, inputs, badges, card). App-wide rollout **completed 2026-09-26**: 34 component/page files (`emerald-*` → `amber-*`), `manifest.webmanifest` + layout `viewport.themeColor` → `#92400e`; REVIEWED green badges unchanged. Verified: `tsc` clean, production build green, live visual pass (home/login/browse/learn render gold, zero `emerald-` in served HTML).
+
+## 2026-10-01 — Product scope narrowed: basic school + Ghana only
+
+**Decision:** the product covers **Primary + JHS only (Basic 1–9)** and **Ghana only**. SHS/TVET taxonomy, resources and UI entry points were removed, as was the Nigeria system skeleton.
+
+**What changed:** SHS/TVET classes, subjects, topics and resources deleted from local and production databases (FK-safe script); Nigeria system removed; seed grows Primary/JHS content only; browse/assessments/onboarding/forms offer Primary + JHS; landing page repositioned to Basic 1–9. The `EducationLevel` enum still lists SHS/TVET so the scope can return without a schema change. The PRD body above (§3, §38–39) still describes the original four-level vision — treat this note as the binding scope until it is revised.

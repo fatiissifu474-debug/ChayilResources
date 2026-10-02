@@ -10,7 +10,7 @@ const RESOURCE_TYPES = [
   "REVISION_MATERIAL", "PRESENTATION", "VIDEO", "DIAGRAM", "POSTER", "OTHER",
 ];
 
-const LEVELS = ["PRIMARY", "JHS", "SHS", "TVET"];
+const LEVELS = ["PRIMARY", "JHS"];
 
 interface ClassLevel { id: string; level: string; name: string }
 interface Subject { id: string; level: string; name: string }

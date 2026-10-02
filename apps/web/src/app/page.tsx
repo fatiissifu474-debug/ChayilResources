@@ -19,7 +19,7 @@ export default async function Home() {
         <section className="mx-auto grid w-full max-w-5xl items-center gap-8 px-6 py-14 sm:grid-cols-2">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-amber-700">
-              For Primary · JHS · SHS · TVET teachers
+              For Primary & JHS teachers · Basic 1–9 · Ghana
             </p>
             <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
               Find the right resource for the right class — quickly.
@@ -100,12 +100,10 @@ export default async function Home() {
         {/* Levels */}
         <section className="mx-auto max-w-5xl px-6 pb-12">
           <h2 className="text-2xl font-bold text-zinc-900">Who it serves</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-4">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {[
-              ["Primary", "Lower & upper primary foundations", "PRIMARY"],
-              ["JHS", "BECE-ready teaching resources", "JHS"],
-              ["SHS", "WASSCE-level depth & revision", "SHS"],
-              ["TVET", "Hands-on vocational training", "TVET"],
+              ["Primary", "Lower & upper primary · Basic 1–6", "PRIMARY"],
+              ["JHS", "BECE-ready teaching resources · Basic 7–9", "JHS"],
             ].map(([label, blurb, level]) => (
               <Link
                 key={level}

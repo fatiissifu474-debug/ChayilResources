@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const LEVELS = ["PRIMARY", "JHS", "SHS", "TVET"];
+const LEVELS = ["PRIMARY", "JHS"];
 
 interface ClassLevel { id: string; level: string; name: string }
 interface Subject { id: string; level: string; name: string }

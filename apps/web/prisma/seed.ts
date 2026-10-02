@@ -23,16 +23,6 @@ async function main() {
       name: `JHS ${n}`,
       position: n,
     })),
-    ...[1, 2, 3].map((n) => ({
-      level: EducationLevel.SHS as EducationLevel,
-      name: `SHS ${n}`,
-      position: n,
-    })),
-    ...[1, 2, 3].map((n) => ({
-      level: EducationLevel.TVET as EducationLevel,
-      name: `TVET Year ${n}`,
-      position: n,
-    })),
   ];
 
   for (const c of classNames) {
@@ -148,8 +138,6 @@ async function main() {
   const maths = await ensureSubject("Mathematics", EducationLevel.JHS, ["JHS 1", "JHS 2", "JHS 3"]);
   const science = await ensureSubject("Science", EducationLevel.JHS, ["JHS 1", "JHS 2", "JHS 3"]);
   const engPrimary = await ensureSubject("English Language", EducationLevel.PRIMARY, ["Primary 4", "Primary 5", "Primary 6"]);
-  const biology = await ensureSubject("Biology", EducationLevel.SHS, ["SHS 1"]);
-  const electrical = await ensureSubject("Electrical Installation", EducationLevel.TVET, ["TVET Year 1"]);
 
   const fractions = await ensureTopic("Equivalent fractions", maths.id, {
     objectives: "Learners identify and generate equivalent fractions.",
@@ -158,8 +146,6 @@ async function main() {
   const wordProblems = await ensureTopic("Word problems", maths.id, { classLevelId: classByName["JHS 2"] });
   const photoJhs = await ensureTopic("Photosynthesis", science.id, { classLevelId: classByName["JHS 2"] });
   const fluency = await ensureTopic("Reading fluency", engPrimary.id, { classLevelId: classByName["Primary 4"] });
-  const photoShs = await ensureTopic("Photosynthesis", biology.id, { classLevelId: classByName["SHS 1"] });
-  const circuits = await ensureTopic("Basic circuits", electrical.id, { classLevelId: classByName["TVET Year 1"] });
   const speech = await ensureTopic("Parts of speech", english.id, { classLevelId: jhs2.id });
 
   const samples: Array<Parameters<typeof ensureResource>[0]> = [
@@ -188,18 +174,6 @@ async function main() {
       classLevelId: classByName["Primary 4"], subjectId: engPrimary.id, topicId: fluency.id,
     },
     {
-      title: "SHS 1 Photosynthesis — Revision Notes",
-      description: "Concise WASSCE-oriented notes: stages, factors, equations, common exam traps.",
-      type: ResourceType.REVISION_MATERIAL, level: EducationLevel.SHS,
-      classLevelId: classByName["SHS 1"], subjectId: biology.id, topicId: photoShs.id,
-    },
-    {
-      title: "TVET Electrical Circuits — Practical Activity",
-      description: "Hands-on activity: building series and parallel circuits with safety checklist.",
-      type: ResourceType.PRACTICAL_ACTIVITY, level: EducationLevel.TVET,
-      classLevelId: classByName["TVET Year 1"], subjectId: electrical.id, topicId: circuits.id,
-    },
-    {
       title: "JHS 2 Parts of Speech — Quiz",
       description: "15-question quiz on nouns, verbs, adjectives and adverbs in context.",
       type: ResourceType.QUIZ, level: EducationLevel.JHS,
@@ -218,8 +192,6 @@ async function main() {
 
   // --- Pilot content wave (idempotent): breadth across every level ---
   const batchSubjects = [
-    { name: "English Language", level: EducationLevel.SHS, classes: ["SHS 1", "SHS 2", "SHS 3"] },
-    { name: "Mathematics", level: EducationLevel.SHS, classes: ["SHS 1"] },
     { name: "Mathematics", level: EducationLevel.PRIMARY, classes: ["Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"] },
     { name: "Science", level: EducationLevel.PRIMARY, classes: ["Primary 4", "Primary 5", "Primary 6"] },
     { name: "Social Studies", level: EducationLevel.JHS, classes: ["JHS 1", "JHS 2", "JHS 3"] },
@@ -228,8 +200,6 @@ async function main() {
     [`${EducationLevel.JHS}:Mathematics`]: maths.id,
     [`${EducationLevel.JHS}:Science`]: science.id,
     [`${EducationLevel.PRIMARY}:English Language`]: engPrimary.id,
-    [`${EducationLevel.SHS}:Biology`]: biology.id,
-    [`${EducationLevel.TVET}:Electrical Installation`]: electrical.id,
     [`${EducationLevel.JHS}:English Language`]: english.id,
   };
   for (const s of batchSubjects) {
@@ -245,10 +215,6 @@ async function main() {
     { name: "Phonics basics", subj: "PRIMARY:English Language", cls: "Primary 1" },
     { name: "Number bonds", subj: "PRIMARY:Mathematics", cls: "Primary 2" },
     { name: "Living things", subj: "PRIMARY:Science", cls: "Primary 5" },
-    { name: "Comprehension", subj: "SHS:English Language", cls: "SHS 1" },
-    { name: "Quadratic equations", subj: "SHS:Mathematics", cls: "SHS 1" },
-    { name: "Cell structure", subj: "SHS:Biology", cls: "SHS 1" },
-    { name: "Electrical safety", subj: "TVET:Electrical Installation", cls: "TVET Year 1" },
     { name: "Our nation Ghana", subj: "JHS:Social Studies", cls: "JHS 1" },
   ];
   const topicIds: Record<string, string> = {};
@@ -281,23 +247,12 @@ async function main() {
     R("Primary 2 Number Bonds — Quiz", "Quick oral and written check for fluency.", ResourceType.QUIZ, EducationLevel.PRIMARY, "Primary 2", "PRIMARY:Mathematics", "Number bonds"),
     R("Primary 5 Living Things — Reading Material", "Plants, animals and habitats around the school compound.", ResourceType.READING_MATERIAL, EducationLevel.PRIMARY, "Primary 5", "PRIMARY:Science", "Living things"),
     R("Primary 5 Living Things — Practical Activity", "School-ground observation walk with recording sheet.", ResourceType.PRACTICAL_ACTIVITY, EducationLevel.PRIMARY, "Primary 5", "PRIMARY:Science", "Living things"),
-    R("SHS 1 Comprehension — Exam Preparation", "Two WASSCE-style passages with timed practice and model answers.", ResourceType.EXAM_PREP, EducationLevel.SHS, "SHS 1", "SHS:English Language", "Comprehension"),
-    R("SHS 1 Comprehension Strategies — Teacher Guide", "Skimming, scanning and inference techniques for long passages.", ResourceType.TEACHER_GUIDE, EducationLevel.SHS, "SHS 1", "SHS:English Language", "Comprehension"),
-    R("SHS 1 Quadratic Equations — Lesson Plan", "Factorization and formula methods over two periods.", ResourceType.LESSON_PLAN, EducationLevel.SHS, "SHS 1", "SHS:Mathematics", "Quadratic equations"),
-    R("SHS 1 Quadratics — Revision Material", "Formula sheet, worked examples and past-question drills.", ResourceType.REVISION_MATERIAL, EducationLevel.SHS, "SHS 1", "SHS:Mathematics", "Quadratic equations"),
-    R("SHS 1 Cell Structure — Diagram Pack", "Labelled plant and animal cell diagrams with blank versions for testing.", ResourceType.DIAGRAM, EducationLevel.SHS, "SHS 1", "SHS:Biology", "Cell structure"),
-    R("SHS 1 Cell Structure — Revision Notes", "Organelles, functions and comparison table for exams.", ResourceType.REVISION_MATERIAL, EducationLevel.SHS, "SHS 1", "SHS:Biology", "Cell structure"),
-    R("TVET Electrical Safety — Teacher Guide", "Workshop safety rules, PPE and emergency procedures.", ResourceType.TEACHER_GUIDE, EducationLevel.TVET, "TVET Year 1", "TVET:Electrical Installation", "Electrical safety"),
-    R("TVET Electrical Safety — Assessment", "Safety certification quiz with pass mark and remediation notes.", ResourceType.ASSESSMENT, EducationLevel.TVET, "TVET Year 1", "TVET:Electrical Installation", "Electrical safety"),
     R("JHS 1 Our Nation Ghana — Reading Material", "Regions, culture and civic values in simple language.", ResourceType.READING_MATERIAL, EducationLevel.JHS, "JHS 1", "JHS:Social Studies", "Our nation Ghana"),
     R("JHS 1 Our Nation Ghana — Worksheet", "Map labelling and short-answer civic questions.", ResourceType.WORKSHEET, EducationLevel.JHS, "JHS 1", "JHS:Social Studies", "Our nation Ghana"),
     R("JHS 3 BECE Mathematics Mock", "Full 60-question mock with marking scheme and topic map.", ResourceType.EXAM_PREP, EducationLevel.JHS, "JHS 3", "JHS:Mathematics"),
-    R("SHS 1 Biology Mid-Term Assessment", "Theory + objective sections with marking guide.", ResourceType.ASSESSMENT, EducationLevel.SHS, "SHS 1", "SHS:Biology"),
     R("Primary 5 Science Reader (Sample)", "Short illustrated passages for class reading corners.", ResourceType.READING_MATERIAL, EducationLevel.PRIMARY, "Primary 5", "PRIMARY:Science"),
     R("Exit Tickets — Teaching Strategy", "What it is: 2-minute end-of-lesson checks. Why it matters: every learner shows understanding. How to use it: one question on a slip, sort into got-it / wobbly / lost piles. Example: Primary Mathematics — write one number bond to 20.",
       ResourceType.TEACHING_STRATEGY, EducationLevel.PRIMARY, "Primary 2", "PRIMARY:Mathematics"),
-    R("Cold Calling — Teaching Strategy", "What it is: directed questioning. Why it matters: keeps all learners alert. How to use it: pose, pause, name, respond. Example: SHS Biology — Ama, name one function of the cell membrane.",
-      ResourceType.TEACHING_STRATEGY, EducationLevel.SHS, "SHS 1", "SHS:Biology"),
   ];
 
   for (const w of wave) {

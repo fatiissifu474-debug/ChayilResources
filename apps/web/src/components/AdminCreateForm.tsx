@@ -11,7 +11,7 @@ const RESOURCE_TYPES = [
   "REMEDIAL", "ENRICHMENT", "OTHER",
 ];
 
-const LEVELS = ["PRIMARY", "JHS", "SHS", "TVET"];
+const LEVELS = ["PRIMARY", "JHS"];
 
 interface ClassLevel { id: string; level: string; name: string }
 interface Subject { id: string; level: string; name: string }

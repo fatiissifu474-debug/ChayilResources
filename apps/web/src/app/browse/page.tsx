@@ -19,6 +19,10 @@ const LEVEL_LABELS: Record<EducationLevel, string> = {
   TVET: "TVET",
 };
 
+// Product scope: basic school only (Primary + JHS, i.e. Basic 1–9).
+// SHS/TVET remain in the enum but have no data and no UI entry points.
+const ACTIVE_LEVELS: EducationLevel[] = ["PRIMARY", "JHS"];
+
 // Curated subset for the assessment-centre basics (full list lives in the schema enum).
 const TYPE_OPTIONS: ResourceType[] = [
   "LESSON_PLAN",
@@ -63,6 +67,7 @@ export default async function BrowsePage({
         <SiteHeader />
         <main className="mx-auto max-w-5xl px-6 py-8">
           <h1 className="text-2xl font-bold text-zinc-900">Browse by level</h1>
+        {systems.length > 1 && (
         <div className="mt-3 flex flex-wrap gap-2">
           {systems.map((s) => (
             <Link
@@ -74,8 +79,9 @@ export default async function BrowsePage({
             </Link>
           ))}
         </div>
+        )}
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {(Object.values(EducationLevel) as EducationLevel[]).map((l) => (
+            {ACTIVE_LEVELS.map((l) => (
               <Link
                 key={l}
                 href={system && activeSystem ? `/browse?level=${l}&system=${activeSystem.id}` : `/browse?level=${l}`}

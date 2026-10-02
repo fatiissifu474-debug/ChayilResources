@@ -137,7 +137,7 @@ export default async function SearchPage({
       <main className="mx-auto max-w-5xl px-6 py-8">
         <h1 className="text-2xl font-bold text-zinc-900">Search resources</h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Try “JHS 2 fractions lesson plan” or “SHS Biology photosynthesis”.
+          Try “JHS 2 fractions lesson plan” or “Primary 5 living things activity”.
         </p>
         <form method="get" action="/search" className="mt-4 flex gap-2">
           <input
