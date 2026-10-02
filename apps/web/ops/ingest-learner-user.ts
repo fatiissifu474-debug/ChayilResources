@@ -31,6 +31,28 @@ const FILES = [
     basicLevel: 7,
     topicName: "Basic 7 Oral Language",
   },
+  {
+    file: "Basic 7 Learner Resource/B7_English_Unit_3_Rich_Oral_Descriptions.docx",
+    title: "Rich Oral Descriptions — Basic 7 Oral Language",
+    description:
+      "Turn everyday experiences into vivid spoken descriptions: tenses, sentence variety, " +
+      "figurative language and precise vocabulary.",
+    sourceRef: "Basic 7 Oral Language Unit 3",
+    cls: "JHS 1",
+    basicLevel: 7,
+    topicName: "Basic 7 Oral Language",
+  },
+  {
+    file: "Basic 7 Learner Resource/B7_English_Unit_4_Giving_Clear_Directions.docx",
+    title: "Giving Clear Directions — Basic 7 Oral Language",
+    description:
+      "Give directions so clearly a stranger can follow: directional vocabulary, command " +
+      "structures, listening and checking.",
+    sourceRef: "Basic 7 Oral Language Unit 4",
+    cls: "JHS 1",
+    basicLevel: 7,
+    topicName: "Basic 7 Oral Language",
+  },
 ];
 
 /** Ingest the two contributor-built learner books (idempotent by title). */

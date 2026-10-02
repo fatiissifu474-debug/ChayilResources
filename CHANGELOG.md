@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.16.1] - 2026-10-02
+
+### Added
+- Two new contributor learner books ingested (Rich Oral Descriptions, Giving Clear
+  Directions — Basic 7); removed stray editor lock files
+
 ## [0.16.0] - 2026-10-02
 
 ### Added
