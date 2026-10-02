@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.15.1] - 2026-10-02
+
+### Removed
+- Withdrew the 27 generated learner books (not learner-facing enough; contributor
+  will supply originals) — rows, files and sources deleted, 2 contributor books kept
+
 ## [0.15.0] - 2026-10-02
 
 ### Added
