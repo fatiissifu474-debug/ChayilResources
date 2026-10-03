@@ -32,7 +32,10 @@ class DiskStorageDriver implements StorageDriver {
   private dir: string;
 
   constructor() {
-    this.dir = resolve(process.env.STORAGE_DIR ?? "./storage");
+    // Runtime-resolved path (dev/Docker override via STORAGE_DIR; R2 in production).
+    // turbopackIgnore: opts this call out of static filesystem tracing, which
+    // otherwise fails production builds when the trace exceeds size limits.
+    this.dir = resolve(/*turbopackIgnore: true*/ process.env.STORAGE_DIR ?? "./storage");
   }
 
   private pathFor(key: string): string {
