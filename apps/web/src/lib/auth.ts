@@ -5,6 +5,12 @@ import { sendEmail } from "./email";
 
 export const auth = betterAuth({
   database: prismaAdapter(db, { provider: "postgresql" }),
+  // Extra allowed origins (comma-separated), e.g. Vercel preview deployments.
+  // Production domain comes from BETTER_AUTH_URL automatically.
+  trustedOrigins: (process.env.TRUSTED_ORIGINS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean),
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,

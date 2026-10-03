@@ -59,14 +59,16 @@ async function main() {
 
   const subjIds: Record<string, string> = {};
   for (const s of SUBJECTS) {
+    const ids = s.classes.map((n) => ({ id: classByName[n] }));
     const r = await prisma.subject.upsert({
       where: { systemId_level_name: { systemId: ghana.id, level: s.level, name: s.name } },
-      update: {},
+      // Declarative links: reruns repair gaps instead of preserving them.
+      update: { classLevels: { set: ids } },
       create: {
         name: s.name,
         level: s.level,
         systemId: ghana.id,
-        classLevels: { connect: s.classes.map((n) => ({ id: classByName[n] })) },
+        classLevels: { connect: ids },
       },
     });
     subjIds[`${s.level}:${s.name}`] = r.id;
