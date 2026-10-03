@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { SiteHeader } from "@/components/SiteHeader";
 
 /** Lesson preparation packs (PRD §20): curated resource sets per class/subject. */
+export const dynamic = "force-dynamic"; // live DB content: never prerender at build time
+
 export default async function PacksPage() {
   const packs = await db.pack.findMany({
     where: { reviewStatus: "APPROVED" },

@@ -7,6 +7,8 @@ import { ResourceCard } from "@/components/ResourceCard";
  * practical guidance in What → Why → How → Example form, plus CPD reading.
  * Authors structure strategy descriptions under those four headings.
  */
+export const dynamic = "force-dynamic"; // live DB content: never prerender at build time
+
 export default async function StrategiesPage() {
   const strategies = await db.resource.findMany({
     where: { reviewStatus: "APPROVED", type: "TEACHING_STRATEGY" },

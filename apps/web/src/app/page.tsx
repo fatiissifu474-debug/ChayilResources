@@ -4,6 +4,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { BooksArt, ClassroomArt, SchoolArt } from "@/components/LandingArt";
 
 /** Landing page — the front door: a clear "Begin here" path into the product. */
+export const dynamic = "force-dynamic"; // live DB counts: never prerender at build time
+
 export default async function Home() {
   const [resources, subjects, classes] = await Promise.all([
     db.resource.count({ where: { reviewStatus: "APPROVED" } }),
