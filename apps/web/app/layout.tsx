@@ -1,4 +1,5 @@
-"@/components/ServiceWorkerRegistration";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+
 // Inside your metadata export, add:
 export const metadata: Metadata = {
   // ... existing metadata ...
