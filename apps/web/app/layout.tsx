@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
-import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ChayilResources",
