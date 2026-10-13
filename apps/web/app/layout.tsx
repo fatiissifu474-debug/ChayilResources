@@ -1,8 +1,9 @@
+import type { Metadata } from "next";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+// ... keep any other original imports here ...
 
-// Inside your metadata export, add:
 export const metadata: Metadata = {
-  // ... existing metadata ...
+  // ... keep original metadata values ...
   manifest: "/manifest",
   appleWebApp: {
     capable: true,
@@ -17,8 +18,18 @@ export const metadata: Metadata = {
   themeColor: "#1e40af",
 };
 
-// Inside your <body> tag, add:
-<body>
-  <ServiceWorkerRegistration />
-  {/* ... rest of your body content ... */}
-</body>
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <ServiceWorkerRegistration />
+        {/* ... rest of your original body content ... */}
+        {children}
+      </body>
+    </html>
+  );
+}
