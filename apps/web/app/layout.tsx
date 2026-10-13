@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
-// ... keep any other original imports here ...
+import "./globals.css";
 
 export const metadata: Metadata = {
-  // ... keep original metadata values ...
+  title: "ChayilResources",
+  description: "Curriculum-aligned digital resource library for teachers",
   manifest: "/manifest",
   appleWebApp: {
     capable: true,
@@ -27,7 +28,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ServiceWorkerRegistration />
-        {/* ... rest of your original body content ... */}
         {children}
       </body>
     </html>
